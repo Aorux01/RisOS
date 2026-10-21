@@ -42,7 +42,6 @@ if (is_update) {
   status_sprite.SetY(722 * k);
 } else {
   place_centered(logo, 578 * k - logo_size / 2);
-  place_centered(load("hint"), 1158 * k);
   bar_w = 250 * k;
   bar_x = cx - bar_w / 2;
   bar_y = 768 * k;

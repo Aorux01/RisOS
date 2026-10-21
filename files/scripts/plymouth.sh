@@ -22,9 +22,6 @@ rsvg-convert -w 412 -h 412 -o logo.png /usr/share/icons/hicolor/scalable/apps/ri
 svg bar-track 1000 28 '<rect width="1000" height="28" rx="14" fill="#25272e"/>'
 svg bar-fill 1000 28 '<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#3F6F99"/><stop offset="1" stop-color="#7566B8"/></linearGradient></defs><rect width="1000" height="28" rx="14" fill="url(#g)"/>'
 
-# Boot screen.
-text hint 1400 90 42 400 '#6b6e75' middle 700 'Hold a key to pick a previous version'
-
 # Update screen.
 text title 1000 120 72 700 '#ffffff' middle 500 'Updating RisOS'
 text status 800 90 44 400 '#c8cad0' start 0 'Installing'
