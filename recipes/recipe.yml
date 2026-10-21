@@ -13,15 +13,6 @@ modules:
       - source: system
         destination: /
 
-  # Identity: name shown in About, SDDM, fastfetch...
-  - type: script
-    scripts:
-      - identity.sh
-
-  - type: script
-    scripts:
-      - fonts.sh
-
   # System packages. Keep it minimal: everything else goes through Flatpak.
   - type: dnf
     install:
@@ -29,6 +20,18 @@ modules:
         - fastfetch
         - distrobox
         - podman
+        - plymouth-plugin-script
+        - librsvg2-tools
+
+  # Identity (os-release), Figtree font, boot/update splash (Plymouth).
+  - type: script
+    scripts:
+      - identity.sh
+      - fonts.sh
+      - plymouth.sh
+
+  # Rebuild the initramfs so the Plymouth theme is available at boot.
+  - type: initramfs
 
   # User apps (Flatpak). The RisOS Store comes later.
   - type: default-flatpaks

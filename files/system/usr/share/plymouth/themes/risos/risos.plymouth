@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=RisOS
+Description=RisOS boot and update splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/risos
+ScriptFile=/usr/share/plymouth/themes/risos/risos.script

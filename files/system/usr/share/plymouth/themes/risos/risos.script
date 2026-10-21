@@ -1,0 +1,112 @@
+# RisOS Plymouth theme: boot splash and system-update screen.
+# Layout follows style/Démarrage@2x.png and style/Mise à jour@2x.png (reference 2000x1250).
+# Images are rendered at 2x the reference by scripts/plymouth.sh, hence R.
+
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+sw = Window.GetWidth();
+sh = Window.GetHeight();
+cx = sw / 2;
+k = sh / 1250;   # reference px -> screen px
+R = 2;           # render scale of the PNGs
+s = k / R;       # PNG px -> screen px
+
+fun load(name) {
+  img = Image(name + ".png");
+  return img.Scale(img.GetWidth() * s, img.GetHeight() * s);
+}
+
+fun place_centered(img, y) {
+  sprite = Sprite(img);
+  sprite.SetX(cx - img.GetWidth() / 2);
+  sprite.SetY(y);
+  return sprite;
+}
+
+mode = Plymouth.GetMode();
+is_update = (mode == "updates" || mode == "system-upgrade" || mode == "firmware-upgrade");
+
+logo = load("logo");
+logo_size = logo.GetWidth();
+
+if (is_update) {
+  place_centered(logo, 446 * k - logo_size / 2);
+  place_centered(load("title"), 604 * k);
+  bar_w = 562 * k;
+  bar_x = cx - bar_w / 2;
+  bar_y = 697 * k;
+  place_centered(load("note"), 790 * k);
+  status_sprite = Sprite(load("status"));
+  status_sprite.SetX(bar_x);
+  status_sprite.SetY(722 * k);
+} else {
+  place_centered(logo, 578 * k - logo_size / 2);
+  place_centered(load("hint"), 1158 * k);
+  bar_w = 250 * k;
+  bar_x = cx - bar_w / 2;
+  bar_y = 768 * k;
+}
+
+# Progress bar: track plus a fill scaled to the progress.
+bar_h = 7 * k;
+track_img = Image("bar-track.png");
+track = Sprite(track_img.Scale(bar_w, bar_h));
+track.SetX(bar_x);
+track.SetY(bar_y);
+
+fill_img = Image("bar-fill.png");
+fill = Sprite();
+fill.SetX(bar_x);
+fill.SetY(bar_y);
+
+fun set_progress(p) {
+  if (p < 0) p = 0;
+  if (p > 1) p = 1;
+  w = bar_w * p;
+  if (w < bar_h) w = bar_h;
+  fill.SetImage(fill_img.Scale(w, bar_h));
+}
+set_progress(0);
+
+# Percentage (update screen only): digit images composed right-aligned.
+digits = [];
+for (i = 0; i < 10; i++) digits["" + i] = load("d" + i);
+pct_img = load("pct");
+pct_sprites = [];
+pct_count = 0;
+
+fun show_percent(n) {
+  for (j = 0; j < pct_count; j++) pct_sprites[j].SetOpacity(0);
+  text = "" + n;
+  len = String(text).Length();
+  total = pct_img.GetWidth();
+  for (j = 0; j < len; j++) total += digits[text.SubString(j, j + 1)].GetWidth();
+  x = bar_x + bar_w - total;
+  pct_count = 0;
+  for (j = 0; j < len; j++) {
+    img = digits[text.SubString(j, j + 1)];
+    pct_sprites[pct_count] = Sprite(img);
+    pct_sprites[pct_count].SetX(x);
+    pct_sprites[pct_count].SetY(722 * k);
+    x += img.GetWidth();
+    pct_count++;
+  }
+  pct_sprites[pct_count] = Sprite(pct_img);
+  pct_sprites[pct_count].SetX(x);
+  pct_sprites[pct_count].SetY(722 * k);
+  pct_count++;
+}
+
+if (is_update) show_percent(0);
+
+fun boot_progress(time, progress) {
+  set_progress(progress);
+}
+Plymouth.SetBootProgressFunction(boot_progress);
+
+fun system_update(progress) {
+  set_progress(progress / 100);
+  show_percent(progress);
+}
+Plymouth.SetSystemUpdateFunction(system_update);
