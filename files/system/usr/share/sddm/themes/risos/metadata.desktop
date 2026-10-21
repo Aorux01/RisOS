@@ -1,0 +1,11 @@
+[SddmGreeterTheme]
+Name=RisOS
+Description=RisOS login screen
+Author=RisOS
+Type=sddm-theme
+Version=0.1
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=risos
+Theme-API=2.0
+QTVersion=6

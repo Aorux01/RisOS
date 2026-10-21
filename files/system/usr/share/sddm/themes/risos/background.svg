@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1250" viewBox="0 0 2000 1250"><defs>
+<radialGradient id="v" cx="360" cy="190" r="900" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7566B8" stop-opacity=".95"/><stop offset="1" stop-color="#7566B8" stop-opacity="0"/></radialGradient>
+<radialGradient id="t" cx="1720" cy="380" r="720" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2FC4C0" stop-opacity=".75"/><stop offset="1" stop-color="#2FC4C0" stop-opacity="0"/></radialGradient>
+<radialGradient id="c" cx="1100" cy="1280" r="760" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF7A56" stop-opacity=".9"/><stop offset="1" stop-color="#FF7A56" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="2000" height="1250" fill="#1a1d2e"/>
+<rect width="2000" height="1250" fill="url(#v)"/>
+<rect width="2000" height="1250" fill="url(#t)"/>
+<rect width="2000" height="1250" fill="url(#c)"/>
+</svg>
