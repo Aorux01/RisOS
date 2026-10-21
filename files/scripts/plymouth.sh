@@ -31,8 +31,7 @@ text status 800 90 44 400 '#c8cad0' start 0 'Installing'
 rsvg-convert -o note.png <<'SVG'
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="230" viewBox="0 0 1400 230" font-family="Figtree" font-size="42" fill="#8a8d95" text-anchor="middle">
 <text x="700" y="50">Your computer will restart automatically.</text>
-<text x="700" y="124">Your files are untouched. If anything goes wrong,</text>
-<text x="700" y="198">RisOS returns to the previous version.</text>
+<text x="700" y="124">Your files and settings stay exactly as they are.</text>
 </svg>
 SVG
 for d in 0 1 2 3 4 5 6 7 8 9; do text "d$d" 30 90 44 400 '#c8cad0' start 0 "$d"; done
