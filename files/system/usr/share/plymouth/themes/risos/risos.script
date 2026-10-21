@@ -2,103 +2,137 @@
 # Layout follows style/Démarrage@2x.png and style/Mise à jour@2x.png (reference 2000x1250).
 # Images are rendered at 2x the reference by files/scripts/plymouth.sh, hence R.
 # Plymouth script: inside functions, globals must be accessed with "global.".
+# The layout is recomputed whenever the screen size changes (the display mode can
+# change during boot).
 
 Window.SetBackgroundTopColor(0, 0, 0);
 Window.SetBackgroundBottomColor(0, 0, 0);
 
-sw = Window.GetWidth();
-sh = Window.GetHeight();
-cx = sw / 2;
-k = sh / 1250;   # reference px -> screen px
 R = 2;           # render scale of the PNGs
-s = k / R;       # PNG px -> screen px
-
-fun load(name) {
-  img = Image(name + ".png");
-  return img.Scale(img.GetWidth() * global.s, img.GetHeight() * global.s);
-}
-
-fun place_centered(img, y) {
-  sprite = Sprite(img);
-  sprite.SetX(global.cx - img.GetWidth() / 2);
-  sprite.SetY(y);
-  return sprite;
-}
+sw = 0;
+sh = 0;
+cx = 0;
+k = 1;           # reference px -> screen px
+s = 1;           # PNG px -> screen px
 
 mode = Plymouth.GetMode();
 is_update = 0;
 if (mode == "updates" || mode == "system-upgrade" || mode == "firmware-upgrade") is_update = 1;
 
-logo = load("logo");
-logo_size = logo.GetWidth();
+logo_src = Image("logo.png");
+track_src = Image("bar-track.png");
+fill_src = Image("bar-fill.png");
+logo_sprite = Sprite();
+track = Sprite();
+fill = Sprite();
+
+bar_x = 0;
+bar_y = 0;
+bar_w = 0;
+bar_h = 0;
+progress_value = 0;
+tick = 0;
 
 if (is_update) {
-  place_centered(logo, 446 * k - logo_size / 2);
-  place_centered(load("title"), 604 * k);
-  bar_w = 562 * k;
-  bar_y = 697 * k;
-  place_centered(load("note"), 790 * k);
-} else {
-  place_centered(logo, 578 * k - logo_size / 2);
-  bar_w = 250 * k;
-  bar_y = 768 * k;
+  title_src = Image("title.png");
+  note_src = Image("note.png");
+  status_src = Image("status.png");
+  pct_src = Image("pct.png");
+  title_sprite = Sprite();
+  note_sprite = Sprite();
+  status_sprite = Sprite();
+  digit_src = [];
+  for (i = 0; i < 10; i++) digit_src["" + i] = Image("d" + i + ".png");
+  digits = [];
+  pct_img = pct_src;
+  pct_sprites = [];
+  pct_count = 0;
 }
-bar_x = cx - bar_w / 2;
-bar_h = 7 * k;
 
-# Progress bar: a dark track and a gradient fill.
-track_img = Image("bar-track.png");
-track = Sprite(track_img.Scale(bar_w, bar_h));
-track.SetX(bar_x);
-track.SetY(bar_y);
+fun scaled(img) {
+  return img.Scale(img.GetWidth() * global.s, img.GetHeight() * global.s);
+}
 
-fill_img = Image("bar-fill.png");
-fill = Sprite();
-fill.SetY(bar_y);
+fun place_centered(sprite, img, y) {
+  sprite.SetImage(img);
+  sprite.SetX(global.cx - img.GetWidth() / 2);
+  sprite.SetY(y);
+}
 
 fun set_fill(x, w) {
   if (w < global.bar_h) w = global.bar_h;
-  global.fill.SetImage(global.fill_img.Scale(w, global.bar_h));
+  global.fill.SetImage(global.fill_src.Scale(w, global.bar_h));
   global.fill.SetX(x);
 }
 
-if (is_update) {
-  # Real progress, driven by "plymouth system-update --progress=N".
-  set_fill(bar_x, 0);
-
-  status_sprite = Sprite(load("status"));
-  status_sprite.SetX(bar_x);
-  status_sprite.SetY(722 * k);
-
-  digits = [];
-  for (i = 0; i < 10; i++) digits["" + i] = load("d" + i);
-  pct_img = load("pct");
-  pct_sprites = [];
-  pct_count = 0;
-
-  fun show_percent(n) {
-    for (j = 0; j < global.pct_count; j++) global.pct_sprites[j].SetOpacity(0);
-    text = "" + n;
-    len = StringLength(text);
-    total = global.pct_img.GetWidth();
-    for (j = 0; j < len; j++) total += global.digits[StringCopy(text, j, 1)].GetWidth();
-    x = global.bar_x + global.bar_w - total;
-    count = 0;
-    for (j = 0; j < len; j++) {
-      img = global.digits[StringCopy(text, j, 1)];
-      global.pct_sprites[count] = Sprite(img);
-      global.pct_sprites[count].SetX(x);
-      global.pct_sprites[count].SetY(722 * global.k);
-      x += img.GetWidth();
-      count++;
-    }
-    global.pct_sprites[count] = Sprite(global.pct_img);
+fun show_percent(n) {
+  global.progress_value = n;
+  for (j = 0; j < global.pct_count; j++) global.pct_sprites[j].SetOpacity(0);
+  text = "" + n;
+  len = StringLength(text);
+  total = global.pct_img.GetWidth();
+  for (j = 0; j < len; j++) total += global.digits[StringCopy(text, j, 1)].GetWidth();
+  x = global.bar_x + global.bar_w - total;
+  count = 0;
+  for (j = 0; j < len; j++) {
+    img = global.digits[StringCopy(text, j, 1)];
+    global.pct_sprites[count] = Sprite(img);
     global.pct_sprites[count].SetX(x);
     global.pct_sprites[count].SetY(722 * global.k);
-    global.pct_count = count + 1;
+    x += img.GetWidth();
+    count++;
   }
-  show_percent(0);
+  global.pct_sprites[count] = Sprite(global.pct_img);
+  global.pct_sprites[count].SetX(x);
+  global.pct_sprites[count].SetY(722 * global.k);
+  global.pct_count = count + 1;
+}
 
+fun layout() {
+  global.sw = Window.GetWidth();
+  global.sh = Window.GetHeight();
+  global.cx = global.sw / 2;
+  global.k = global.sh / 1250;
+  global.s = global.k / global.R;
+  k = global.k;
+
+  logo = scaled(global.logo_src);
+  if (global.is_update) {
+    place_centered(global.logo_sprite, logo, 446 * k - logo.GetWidth() / 2);
+    place_centered(global.title_sprite, scaled(global.title_src), 604 * k);
+    place_centered(global.note_sprite, scaled(global.note_src), 790 * k);
+    global.bar_w = 562 * k;
+    global.bar_y = 697 * k;
+  } else {
+    place_centered(global.logo_sprite, logo, 578 * k - logo.GetWidth() / 2);
+    global.bar_w = 250 * k;
+    global.bar_y = 768 * k;
+  }
+  global.bar_x = global.cx - global.bar_w / 2;
+  global.bar_h = 7 * k;
+
+  global.track.SetImage(global.track_src.Scale(global.bar_w, global.bar_h));
+  global.track.SetX(global.bar_x);
+  global.track.SetY(global.bar_y);
+  global.fill.SetY(global.bar_y);
+
+  if (global.is_update) {
+    global.status_sprite.SetImage(scaled(global.status_src));
+    global.status_sprite.SetX(global.bar_x);
+    global.status_sprite.SetY(722 * k);
+    for (i = 0; i < 10; i++) global.digits["" + i] = scaled(global.digit_src["" + i]);
+    global.pct_img = scaled(global.pct_src);
+    show_percent(global.progress_value);
+    set_fill(global.bar_x, global.bar_w * global.progress_value / 100);
+  } else {
+    set_fill(global.bar_x, global.bar_w * 0.3);
+  }
+}
+
+layout();
+
+if (is_update) {
+  # Real progress, driven by "plymouth system-update --progress=N".
   fun system_update(progress) {
     if (progress < 0) progress = 0;
     if (progress > 100) progress = 100;
@@ -106,17 +140,17 @@ if (is_update) {
     show_percent(progress);
   }
   Plymouth.SetSystemUpdateFunction(system_update);
-} else {
-  # Boot progress is not reliable, so use an indeterminate animation:
-  # a segment gliding back and forth along the track.
-  seg_w = bar_w * 0.3;
-  tick = 0;
-
-  fun animate() {
-    global.tick++;
-    t = global.tick / 50;                       # ~50 refreshes per second
-    pos = (1 - Math.Cos(t * 3.14159 / 1.1)) / 2; # 0 -> 1 -> 0, full cycle every 2.2 s
-    set_fill(global.bar_x + (global.bar_w - global.seg_w) * pos, global.seg_w);
-  }
-  Plymouth.SetRefreshFunction(animate);
 }
+
+fun refresh() {
+  if (Window.GetWidth() != global.sw || Window.GetHeight() != global.sh) layout();
+  if (!global.is_update) {
+    # Boot progress is not reliable: a segment glides back and forth along the track.
+    global.tick++;
+    t = global.tick / 50;                          # ~50 refreshes per second
+    pos = (1 - Math.Cos(t * 3.14159 / 1.1)) / 2;   # 0 -> 1 -> 0, one cycle every 2.2 s
+    seg_w = global.bar_w * 0.3;
+    set_fill(global.bar_x + (global.bar_w - seg_w) * pos, seg_w);
+  }
+}
+Plymouth.SetRefreshFunction(refresh);

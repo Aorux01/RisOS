@@ -16,7 +16,12 @@ text() { # name width height size weight color anchor x text
 }
 
 # Logo: the app-icon version of the glyph, 206 px in the reference.
-rsvg-convert -w 412 -h 412 -o logo.png /usr/share/icons/hicolor/scalable/apps/risos-logo.svg
+# Drop the grain overlay and the drop shadow (SVG filters), which are not needed at splash size
+# and are not rendered reliably by rsvg-convert.
+sed -e 's|<rect[^>]*filter="url(#nx)"[^>]*/>||'     -e 's| style="filter:drop-shadow([^"]*)"||'     /usr/share/icons/hicolor/scalable/apps/risos-logo.svg > /tmp/risos-logo-splash.svg
+rsvg-convert -w 412 -h 412 -o logo.png /tmp/risos-logo-splash.svg
+rm -f /tmp/risos-logo-splash.svg
+test -s logo.png
 
 # Progress bar: dark track and blue-to-violet fill.
 svg bar-track 1000 28 '<rect width="1000" height="28" rx="14" fill="#25272e"/>'
