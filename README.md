@@ -31,3 +31,13 @@ Atomic OS derived from Fedora Kinoite, built with [BlueBuild](https://blue-build
 | `files/scripts/` | Scripts run during the build |
 | `style/` | Mockups, logo SVGs and design tokens (palette, Figtree font) |
 | `.github/workflows/build.yml` | Daily build on GitHub Actions |
+
+## Fast iteration in the VM
+
+Image builds take 7 to 10 minutes. For the SDDM theme, color schemes, wallpapers and /etc config, skip the build:
+
+```
+curl -fsSL https://raw.githubusercontent.com/Aorux01/RisOS/main/tools/dev-sync.sh | bash -s -- --restart-sddm
+```
+
+It pulls the latest `files/system` from GitHub into a temporary overlay (gone at next reboot). It does not cover Plymouth or packages: those need a build.
