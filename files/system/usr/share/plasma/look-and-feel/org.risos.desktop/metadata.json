@@ -1,0 +1,15 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "RisOS"
+            }
+        ],
+        "Description": "RisOS look and feel",
+        "Id": "org.risos.desktop",
+        "License": "GPL-2.0+",
+        "Name": "RisOS",
+        "Version": "0.1"
+    }
+}

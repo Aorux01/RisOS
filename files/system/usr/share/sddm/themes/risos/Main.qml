@@ -22,6 +22,7 @@ Rectangle {
     property string userLogin: ""
     property bool failed: false
     property bool menuOpen: false
+    property bool showPassword: false
 
     // System state, read from /sys and /proc (see GreeterEnvironment in zz-risos.conf).
     // Anything that cannot be read is simply not shown.
@@ -47,19 +48,19 @@ Rectangle {
     // ---- Date and time -------------------------------------------------------------------
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 92 * root.u
+        y: 84 * root.u
         text: Qt.formatDate(root.now, "dddd, MMMM d")
         color: root.inkSoft
         font.family: root.fontFamily
-        font.pixelSize: 26 * root.u
+        font.pixelSize: 31 * root.u
     }
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 124 * root.u
+        y: 122 * root.u
         text: Qt.formatTime(root.now, "hh:mm")
         color: root.ink
         font.family: root.fontFamily
-        font.pixelSize: 150 * root.u
+        font.pixelSize: 184 * root.u
         font.weight: Font.DemiBold
     }
 
@@ -67,37 +68,37 @@ Rectangle {
     Row {
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.margins: 36 * root.u
-        spacing: 18 * root.u
+        anchors.margins: 40 * root.u
+        spacing: 22 * root.u
         layoutDirection: Qt.LeftToRight
 
         EthernetIcon {
             visible: root.netKind === "wired"
-            width: 22 * root.u
-            height: 22 * root.u
+            width: 28 * root.u
+            height: 28 * root.u
             color: root.ink
         }
         WifiIcon {
             visible: root.netKind !== "wired"
-            width: 22 * root.u
-            height: 22 * root.u
+            width: 28 * root.u
+            height: 28 * root.u
             color: root.ink
             level: root.wifiLevel
             offline: root.netKind === "none"
         }
         Row {
             visible: root.batteryPercent >= 0
-            spacing: 6 * root.u
+            spacing: 8 * root.u
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.batteryPercent + "%"
                 color: root.inkSoft
                 font.family: root.fontFamily
-                font.pixelSize: 15 * root.u
+                font.pixelSize: 19 * root.u
             }
             BatteryIcon {
-                width: 34 * root.u
-                height: 22 * root.u
+                width: 44 * root.u
+                height: 28 * root.u
                 color: root.ink
                 percent: root.batteryPercent
                 charging: root.charging
@@ -109,10 +110,10 @@ Rectangle {
     // Avatar and name. Click the avatar to switch user when there are several.
     ListView {
         id: users
-        width: 360 * root.u
-        height: 120 * root.u
+        width: 400 * root.u
+        height: 150 * root.u
         x: (root.width - width) / 2
-        y: 590 * root.u
+        y: 520 * root.u
         model: userModel
         currentIndex: userModel.lastIndex
         orientation: ListView.Horizontal
@@ -128,7 +129,7 @@ Rectangle {
             readonly property string shownName: model.realName && model.realName.length > 0 ? model.realName : model.name
 
             Rectangle {
-                width: 76 * root.u
+                width: 96 * root.u
                 height: width
                 radius: width / 2
                 x: (parent.width - width) / 2
@@ -142,7 +143,7 @@ Rectangle {
                     text: shownName.charAt(0).toUpperCase()
                     color: "#ffffff"
                     font.family: root.fontFamily
-                    font.pixelSize: 34 * root.u
+                    font.pixelSize: 42 * root.u
                     font.weight: Font.DemiBold
                 }
                 MouseArea {
@@ -154,11 +155,11 @@ Rectangle {
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                y: 88 * root.u
+                y: 110 * root.u
                 text: shownName
                 color: root.ink
                 font.family: root.fontFamily
-                font.pixelSize: 21 * root.u
+                font.pixelSize: 26 * root.u
                 font.weight: Font.DemiBold
             }
         }
@@ -167,34 +168,34 @@ Rectangle {
     Rectangle {
         id: field
         readonly property real restX: (root.width - width) / 2
-        width: 380 * root.u
-        height: 56 * root.u
+        width: 440 * root.u
+        height: 68 * root.u
         radius: height / 2
         x: restX
-        y: 722 * root.u
+        y: 684 * root.u
         color: root.fieldFill
         border.width: 1
         border.color: root.failed ? "#D9604F" : Qt.rgba(0, 0, 0, passwordInput.activeFocus ? 0.18 : 0.07)
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
-            x: 26 * root.u
+            x: 30 * root.u
             visible: passwordInput.text.length === 0
             text: root.failed ? "Incorrect password" : "Password"
             color: root.failed ? root.danger : root.hint
             font.family: root.fontFamily
-            font.pixelSize: 20 * root.u
+            font.pixelSize: 24 * root.u
         }
         TextInput {
             id: passwordInput
             anchors.verticalCenter: parent.verticalCenter
-            x: 26 * root.u
-            width: parent.width - 80 * root.u
-            echoMode: TextInput.Password
+            x: 30 * root.u
+            width: parent.width - 150 * root.u
+            echoMode: root.showPassword ? TextInput.Normal : TextInput.Password
             passwordCharacter: "•"
             color: root.ink
             font.family: root.fontFamily
-            font.pixelSize: 20 * root.u
+            font.pixelSize: 24 * root.u
             clip: true
             focus: true
             onTextChanged: root.failed = false
@@ -202,16 +203,34 @@ Rectangle {
             Keys.onEnterPressed: root.login()
             Keys.onEscapePressed: root.menuOpen = false
         }
-        Canvas {
-            width: 20 * root.u
-            height: 20 * root.u
+        EyeIcon {
+            width: 26 * root.u
+            height: 26 * root.u
             anchors.verticalCenter: parent.verticalCenter
-            x: parent.width - 26 * root.u - width
+            x: arrow.x - 18 * root.u - width
+            color: root.showPassword ? root.ink : root.hint
+            crossed: !root.showPassword
+            MouseArea {
+                anchors.fill: parent
+                anchors.margins: -10 * root.u
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    root.showPassword = !root.showPassword
+                    passwordInput.forceActiveFocus()
+                }
+            }
+        }
+        Canvas {
+            id: arrow
+            width: 24 * root.u
+            height: 24 * root.u
+            anchors.verticalCenter: parent.verticalCenter
+            x: parent.width - 30 * root.u - width
             onPaint: {
                 var c = getContext("2d")
                 c.reset()
                 c.strokeStyle = root.ink
-                c.lineWidth = 1.9 * root.u
+                c.lineWidth = 2.2 * root.u
                 c.lineCap = "round"
                 c.lineJoin = "round"
                 var m = height / 2
@@ -251,19 +270,19 @@ Rectangle {
 
     Rectangle {
         id: powerButton
-        width: 44 * root.u
+        width: 56 * root.u
         height: width
         radius: width / 2
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 32 * root.u
+        anchors.margins: 36 * root.u
         color: root.menuOpen || powerArea.containsMouse ? Qt.rgba(0, 0, 0, 0.07) : "transparent"
         z: 6
 
         PowerIcon {
             anchors.centerIn: parent
-            width: 24 * root.u
-            height: 24 * root.u
+            width: 30 * root.u
+            height: 30 * root.u
             color: root.ink
         }
         MouseArea {
@@ -278,9 +297,9 @@ Rectangle {
     Rectangle {
         visible: root.menuOpen
         z: 6
-        width: 176 * root.u
-        height: menuColumn.height + 16 * root.u
-        radius: 16 * root.u
+        width: 220 * root.u
+        height: menuColumn.height + 20 * root.u
+        radius: 18 * root.u
         color: Qt.rgba(1, 1, 1, 0.94)
         border.width: 1
         border.color: Qt.rgba(0, 0, 0, 0.08)
@@ -290,9 +309,9 @@ Rectangle {
 
         Column {
             id: menuColumn
-            x: 8 * root.u
-            y: 8 * root.u
-            width: parent.width - 16 * root.u
+            x: 10 * root.u
+            y: 10 * root.u
+            width: parent.width - 20 * root.u
 
             Repeater {
                 model: [
@@ -302,16 +321,16 @@ Rectangle {
                 delegate: Rectangle {
                     visible: modelData.enabled
                     width: menuColumn.width
-                    height: modelData.enabled ? 42 * root.u : 0
-                    radius: 10 * root.u
+                    height: modelData.enabled ? 52 * root.u : 0
+                    radius: 12 * root.u
                     color: rowArea.containsMouse ? Qt.rgba(0.46, 0.4, 0.72, 0.12) : "transparent"
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        x: 14 * root.u
+                        x: 16 * root.u
                         text: modelData.label
                         color: root.ink
                         font.family: root.fontFamily
-                        font.pixelSize: 18 * root.u
+                        font.pixelSize: 22 * root.u
                     }
                     MouseArea {
                         id: rowArea
