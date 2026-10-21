@@ -1,0 +1,8 @@
+{
+  "KPlugin": {
+    "Id": "RisOS",
+    "Name": "RisOS",
+    "Authors": [{ "Name": "RisOS" }],
+    "License": "CC-BY-SA-4.0"
+  }
+}

@@ -15,3 +15,8 @@ grep -q '^VARIANT_ID=' /usr/lib/os-release \
   || echo 'VARIANT_ID=risos' >> /usr/lib/os-release
 
 grep -q '^VARIANT=' /usr/lib/os-release || echo 'VARIANT="RisOS"' >> /usr/lib/os-release
+
+# Logo affiché dans « À propos » (icône risos-logo, installée dans hicolor).
+grep -q '^LOGO=' /usr/lib/os-release \
+  && sed -i 's|^LOGO=.*|LOGO=risos-logo|' /usr/lib/os-release \
+  || echo 'LOGO=risos-logo' >> /usr/lib/os-release

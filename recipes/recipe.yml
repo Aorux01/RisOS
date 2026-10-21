@@ -18,6 +18,10 @@ modules:
     scripts:
       - identity.sh
 
+  - type: script
+    scripts:
+      - fonts.sh
+
   # Paquets système. Rester minimal : tout le reste passe par Flatpak.
   - type: dnf
     install:
