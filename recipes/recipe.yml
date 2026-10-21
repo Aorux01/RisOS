@@ -23,9 +23,10 @@ modules:
         - plymouth-plugin-script
         - librsvg2-tools
 
-  # Identity (os-release), Figtree font, boot/update splash (Plymouth).
+  # Login manager (SDDM), identity (os-release), Figtree font, boot/update splash (Plymouth).
   - type: script
     scripts:
+      - display-manager.sh
       - identity.sh
       - fonts.sh
       - plymouth.sh
