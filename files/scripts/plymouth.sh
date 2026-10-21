@@ -20,7 +20,7 @@ rsvg-convert -w 412 -h 412 -o logo.png /usr/share/icons/hicolor/scalable/apps/ri
 
 # Progress bar: dark track and blue-to-violet fill.
 svg bar-track 1000 28 '<rect width="1000" height="28" rx="14" fill="#25272e"/>'
-svg bar-fill 1000 28 '<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#3F6F99"/><stop offset="1" stop-color="#7566B8"/></linearGradient></defs><rect width="1000" height="28" rx="14" fill="url(#g)"/>'
+svg bar-fill 1000 28 '<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#2FC4C0"/><stop offset=".5" stop-color="#4D86E8"/><stop offset="1" stop-color="#9A6BF0"/></linearGradient></defs><rect width="1000" height="28" rx="14" fill="url(#g)"/>'
 
 # Update screen.
 text title 1000 120 72 700 '#ffffff' middle 500 'Updating RisOS'

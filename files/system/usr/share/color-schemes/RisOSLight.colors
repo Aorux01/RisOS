@@ -6,44 +6,44 @@ Name=RisOS Light
 BackgroundNormal=251,250,248
 BackgroundAlternate=247,247,245
 ForegroundNormal=34,38,47
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:View]
 BackgroundNormal=251,250,248
 BackgroundAlternate=247,247,245
 ForegroundNormal=34,38,47
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:Button]
 BackgroundNormal=247,247,245
 BackgroundAlternate=240,240,236
 ForegroundNormal=34,38,47
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:Selection]
 BackgroundNormal=221,232,241
 BackgroundAlternate=210,223,236
 ForegroundNormal=40,70,104
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:Tooltip]
 BackgroundNormal=34,38,47
 ForegroundNormal=247,247,245
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:Complementary]
 BackgroundNormal=36,40,48
 ForegroundNormal=236,238,242
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
 
 [Colors:Header]
 BackgroundNormal=247,247,245
 ForegroundNormal=34,38,47
-DecorationFocus=70,112,159
-DecorationHover=115,102,176
+DecorationFocus=77,134,232
+DecorationHover=154,107,240
