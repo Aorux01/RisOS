@@ -28,6 +28,6 @@ Atomic OS derived from Fedora Kinoite, built with [BlueBuild](https://blue-build
 |---|---|
 | `recipes/recipe.yml` | Image description (base, packages, Flatpaks) |
 | `files/system/` | Files copied as-is into the image (`/usr/share/risos/`, color schemes, wallpapers...) |
-| `scripts/` | Scripts run during the build |
+| `files/scripts/` | Scripts run during the build |
 | `style/` | Mockups, logo SVGs and design tokens (palette, Figtree font) |
 | `.github/workflows/build.yml` | Daily build on GitHub Actions |
