@@ -1,0 +1,99 @@
+RisOS, plan de route
+21 oct. 2026 · @Lery
+Le principe
+RisOS démarre sur une base existante, comme SteamOS de Valve, et remplace peu à peu tout ce que l'utilisateur voit et touche par du code écrit pour lui.
+• Emprunté, et on l'assume : noyau Linux, pilotes, mises à jour de sécurité, bibliothèques graphiques (Wayland, Mesa, PipeWire). Personne ne réécrit ça.
+• À nous dès le départ : l'identité, le shell (dock, barre, lanceur, notifications, verrouillage), les apps de base, le Magasin, la continuité avec le téléphone.
+• À nous à terme : le compositeur (gestion des fenêtres), puis éventuellement notre propre chaîne de construction. Le code écrit entre-temps ne change pas, il suffit de le déplacer sur la nouvelle base.
+Règle de conduite : à chaque phase, il y a quelque chose qui démarre et qu'on peut montrer.
+Les choix techniques
+Sujet
+Choix
+Pourquoi
+Base
+Fedora Atomic (Kinoite)
+Image identique pour tous, mises à jour atomiques, retour arrière
+Construction
+BlueBuild (Universal Blue)
+Un dépôt GitHub décrit l'image, GitHub Actions la construit, aucun serveur
+Bureau au début
+KDE Plasma habillé
+Un OS qui tourne vite, pendant qu'on écrit le reste
+Compositeur
+Rust + Smithay
+Contrôle total des fenêtres, animations et cadre d'origine
+Shell et apps
+Rust (Iced ou Slint) ou QML/Quickshell, à trancher après un prototype
+Un seul style partout
+Apps
+Flatpak
+Format indépendant de toute distribution
+Android
+Waydroid
+Apps Android dans une fenêtre
+Windows
+Wine, Proton, Bottles
+Jeux et apps Windows
+Continuité
+KDE Connect, puis app Android maison
+Notifications, fichiers, presse-papiers
+Matériel cible
+VM, puis 1 ou 2 machines précises
+Comme Valve avec le Steam Deck
+Les phases
+Durées indicatives, à un rythme de loisir. Chaque phase se termine par un résultat qu'on peut ouvrir dans une VM.
+Phase 0 · Atelier (1 week-end)
+[ ] Créer le dépôt GitHub avec le modèle BlueBuild basé sur Kinoite
+[ ] Faire démarrer l'image dans une VM
+[ ] Tester Waydroid sur la machine cible (premier risque technique)
+• Résultat : « RisOS 0.0 » qui démarre avec son nom
+Phase 1 · La peau (3 à 6 semaines)
+[ ] Palette claire et sombre, police Figtree, icônes, curseurs, fonds d'écran
+[ ] Écran de démarrage (Plymouth) et de connexion (SDDM) aux couleurs de RisOS
+[ ] Dock flottant et barre du haut dans Plasma
+[ ] Installeur habillé (le parcours complet de la maquette viendra plus tard)
+• Résultat : une VM qui ressemble à 70 % des maquettes
+Phase 2 · Le compositeur (2 à 4 mois)
+[ ] Compositeur Rust minimal qui affiche une fenêtre de terminal
+[ ] Fenêtres, déplacement, animations, thème clair et sombre
+[ ] Cadre d'origine (Natif, Android, Windows)
+[ ] Espaces (Perso, Travail, Dev, Jeux)
+• Résultat : RisOS démarre sans Plasma
+Phase 3 · Le shell (2 à 4 mois)
+[ ] Barre du haut et dock
+[ ] Lanceur et recherche globale
+[ ] Centre de notifications
+[ ] Écran de verrouillage
+• Résultat : tout ce que montrent les maquettes du bureau, écrit par nous
+Phase 4 · Les apps de base (3 à 6 mois)
+[ ] Fichiers
+[ ] Réglages (dont Réseau et Vie privée)
+[ ] Notes, courrier, agenda
+• Résultat : un usage quotidien possible
+Phase 5 · Compatibilité et Magasin (2 à 4 mois)
+[ ] Magasin unifié avec les pastilles d'origine
+[ ] Waydroid intégré, apps Android dans des fenêtres RisOS
+[ ] Recettes Windows (Bottles, Proton) pour quelques apps courantes
+• Résultat : installer une app de n'importe quelle origine en un clic
+Phase 6 · Téléphone et vie privée (2 à 4 mois)
+[ ] Onboarding du téléphone et page Continuité (KDE Connect)
+[ ] Tableau de bord Vie privée (caméra, micro, écran, via les portails et PipeWire)
+[ ] Pare-feu par app
+[ ] Mode Dev en un clic (Distrobox, Podman)
+• Résultat : les fonctions signature sont là
+Phase 7 · Distribution (en continu)
+[ ] Registre d'images et signature des mises à jour
+[ ] Canaux stable et test
+[ ] ISO téléchargeable, site web, documentation
+[ ] Étudier une chaîne de construction à nous (Buildroot ou Yocto) si on veut devenir indépendant de Fedora
+Risques et limites
+• Waydroid demande des modules noyau et se comporte mal avec certains GPU, surtout Nvidia. Il faut le tester dès la phase 0, avant d'investir dans le reste.
+• Sécurité : même dérivé, il faut reconstruire et publier régulièrement l'image. C'est le vrai coût d'une distribution.
+• Matériel : Wi-Fi, GPU récents et portables demandent des pilotes qui bougent vite. On cible d'abord la VM, puis une ou deux machines.
+• Compositeur en Rust : la phase la plus difficile. En cas de blocage, on reste sur KWin ou un compositeur existant (niri, labwc) le temps d'avancer sur le reste.
+• Ce qu'on ne promet pas : apps iOS et macOS (raisons techniques et légales), et un noyau ou des pilotes écrits de zéro.
+Cette semaine
+[ ] Créer le dépôt BlueBuild et faire booter l'image dans une VM
+[ ] Tester Waydroid sur la machine cible (noter le GPU)
+[ ] Appliquer palette, police et fond d'écran à Plasma, en clair et en sombre
+[ ] Choisir le langage du shell après un petit prototype : une fenêtre avec le dock en Rust (Iced ou Slint) et la même en QML
