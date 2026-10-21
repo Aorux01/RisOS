@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installe Figtree (OFL) à l'échelle du système.
+# Install Figtree (OFL) system-wide.
 set -euo pipefail
 
 dest=/usr/share/fonts/figtree

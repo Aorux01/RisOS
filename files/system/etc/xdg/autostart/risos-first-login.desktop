@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=RisOS : apparence par défaut
+Name=RisOS default appearance
 Exec=/usr/libexec/risos/first-login.sh
 OnlyShowIn=KDE;
 NoDisplay=true

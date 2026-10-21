@@ -1,19 +1,19 @@
-# RisOS 0.00.00 : image Kinoite (Fedora Atomic, KDE Plasma) construite avec BlueBuild.
-# Doc des modules : https://blue-build.org/reference/recipe/
+# RisOS 0.00.00: Kinoite image (Fedora Atomic, KDE Plasma) built with BlueBuild.
+# Module reference: https://blue-build.org/reference/recipe/
 name: risos
-description: RisOS, un OS atomique dérivé de Fedora Kinoite.
+description: RisOS, an atomic OS derived from Fedora Kinoite.
 
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: latest
 
 modules:
-  # Copie files/system/ à la racine de l'image (os-release, fonds d'écran, thème...).
+  # Copy files/system/ to the image root (wallpapers, color schemes, ...).
   - type: files
     files:
       - source: system
         destination: /
 
-  # Identité : nom affiché dans « À propos », SDDM, fastfetch...
+  # Identity: name shown in About, SDDM, fastfetch...
   - type: script
     scripts:
       - identity.sh
@@ -22,7 +22,7 @@ modules:
     scripts:
       - fonts.sh
 
-  # Paquets système. Rester minimal : tout le reste passe par Flatpak.
+  # System packages. Keep it minimal: everything else goes through Flatpak.
   - type: dnf
     install:
       packages:
@@ -30,7 +30,7 @@ modules:
         - distrobox
         - podman
 
-  # Apps utilisateur (Flatpak). Le Magasin RisOS viendra plus tard.
+  # User apps (Flatpak). The RisOS Store comes later.
   - type: default-flatpaks
     configurations:
       - notify: true
@@ -42,5 +42,5 @@ modules:
         install:
           - org.mozilla.firefox
 
-  # Signature de l'image (clé cosign.pub à la racine du dépôt).
+  # Image signing (cosign.pub at the repo root).
   - type: signing

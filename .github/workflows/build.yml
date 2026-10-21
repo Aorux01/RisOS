@@ -1,7 +1,7 @@
 name: bluebuild
 on:
   schedule:
-    - cron: "00 06 * * *" # tous les jours : reconstruire = recevoir les correctifs de sécurité
+    - cron: "00 06 * * *" # daily: rebuilding = getting security fixes
   push:
     branches: [main]
     paths-ignore:

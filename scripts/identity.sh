@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Donne son nom à l'image. On garde ID=fedora pour ne rien casser (comme Bazzite / Aurora).
+# Give the image its name. Keep ID=fedora so nothing breaks (like Bazzite / Aurora).
 set -euo pipefail
 
 VERSION="$(cat /usr/share/risos/VERSION)"
@@ -16,7 +16,7 @@ grep -q '^VARIANT_ID=' /usr/lib/os-release \
 
 grep -q '^VARIANT=' /usr/lib/os-release || echo 'VARIANT="RisOS"' >> /usr/lib/os-release
 
-# Logo affiché dans « À propos » (icône risos-logo, installée dans hicolor).
+# Logo shown in About (risos-logo icon, installed in hicolor).
 grep -q '^LOGO=' /usr/lib/os-release \
   && sed -i 's|^LOGO=.*|LOGO=risos-logo|' /usr/lib/os-release \
   || echo 'LOGO=risos-logo' >> /usr/lib/os-release

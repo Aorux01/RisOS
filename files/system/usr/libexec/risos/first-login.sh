@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Applique l'apparence RisOS une seule fois par utilisateur (ensuite il reste libre de la changer).
+# Apply the RisOS look once per user (they stay free to change it afterwards).
 flag="${XDG_CONFIG_HOME:-$HOME/.config}/risos/first-login-done"
 [ -e "$flag" ] && exit 0
 

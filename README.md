@@ -1,33 +1,33 @@
 # RisOS 0.00.00
 
-OS atomique dérivé de Fedora Kinoite, construit avec [BlueBuild](https://blue-build.org). Feuille de route : [infos.txt](infos.txt).
+Atomic OS derived from Fedora Kinoite, built with [BlueBuild](https://blue-build.org). Roadmap: [infos.txt](infos.txt).
 
-## Mise en route (Phase 0)
+## Getting started (Phase 0)
 
-1. **Clés de signature** (une seule fois) :
+1. **Signing keys** (once):
    ```
    cosign generate-key-pair
    ```
-   - `cosign.pub` → à la racine du dépôt (commit).
-   - `cosign.key` → secret GitHub `SIGNING_SECRET` (Settings → Secrets → Actions). Ne jamais commiter.
-2. **Dépôt GitHub** : pousser ce dossier sur `main`. L'action construit et publie `ghcr.io/<utilisateur>/risos`.
-3. **Tester dans une VM** : installer Fedora Kinoite, puis
+   - `cosign.pub` goes at the repo root (committed).
+   - `cosign.key` goes in the GitHub secret `SIGNING_SECRET` (Settings → Secrets → Actions). Never commit it.
+2. **GitHub repo**: push this folder to `main`. The action builds and publishes `ghcr.io/<user>/risos`.
+3. **Test in a VM**: install Fedora Kinoite, then
    ```
-   rpm-ostree rebase ostree-unverified-registry:ghcr.io/<utilisateur>/risos:latest
+   rpm-ostree rebase ostree-unverified-registry:ghcr.io/<user>/risos:latest
    systemctl reboot
    ```
-   puis, pour passer à l'image signée :
+   then switch to the signed image:
    ```
-   rpm-ostree rebase ostree-image-signed:docker://ghcr.io/<utilisateur>/risos:latest
+   rpm-ostree rebase ostree-image-signed:docker://ghcr.io/<user>/risos:latest
    ```
-4. **Test Waydroid** sur la machine cible (noter le GPU) avant d'investir dans la suite.
+4. **Waydroid test** on the target machine (note the GPU) before investing in the rest.
 
-## Structure
+## Layout
 
-| Chemin | Rôle |
+| Path | Role |
 |---|---|
-| `recipes/recipe.yml` | Description de l'image (base, paquets, Flatpaks) |
-| `files/system/` | Fichiers copiés tels quels dans l'image (`/usr/share/risos/`, thème, fonds...) |
-| `scripts/` | Scripts exécutés pendant la construction |
-| `style/` | Maquettes et jetons de design (palette, police Figtree) |
-| `.github/workflows/build.yml` | Construction quotidienne sur GitHub Actions |
+| `recipes/recipe.yml` | Image description (base, packages, Flatpaks) |
+| `files/system/` | Files copied as-is into the image (`/usr/share/risos/`, color schemes, wallpapers...) |
+| `scripts/` | Scripts run during the build |
+| `style/` | Mockups, logo SVGs and design tokens (palette, Figtree font) |
+| `.github/workflows/build.yml` | Daily build on GitHub Actions |
