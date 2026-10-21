@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Give the image its name. Keep ID=fedora so nothing breaks (like Bazzite / Aurora).
-set -euo pipefail
+set -euxo pipefail
 
 VERSION="$(cat /usr/share/risos/VERSION)"
 
