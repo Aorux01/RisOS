@@ -29,7 +29,7 @@ for (var i = 0; i < existing.length; i++) {
 // Left: logo, active app name, its menus. Right: system tray (network, battery, ...) and clock.
 var bar = new Panel();
 bar.location = "top";
-bar.height = 42;
+bar.height = 40;
 bar.floating = false;
 bar.hiding = "none";
 bar.lengthMode = "fill";
@@ -45,23 +45,13 @@ tryAdd(bar, "org.kde.plasma.appmenu");
 tryAdd(bar, "org.kde.plasma.panelspacer");
 tryAdd(bar, "org.kde.plasma.systemtray");
 
-var clock = tryAdd(bar, "org.kde.plasma.digitalclock");
-if (clock) {
-    clock.currentConfigGroup = ["Appearance"];
-    clock.writeConfig("showDate", true);
-    clock.writeConfig("dateDisplayFormat", "BesideTime");
-    clock.writeConfig("dateFormat", "custom");
-    clock.writeConfig("customDateFormat", "ddd d MMM");
-    clock.writeConfig("autoFontAndSize", false);
-    clock.writeConfig("fontFamily", "Figtree");
-    clock.writeConfig("fontSize", 12);
-    clock.writeConfig("boldText", true);
-}
+// Our own clock: date in regular grey, time in bold (plasmoid org.risos.clock).
+tryAdd(bar, "org.risos.clock");
 
 // ---- Floating dock ------------------------------------------------------------------------
 var dock = new Panel();
 dock.location = "bottom";
-dock.height = 84;
+dock.height = 68;
 dock.floating = true;
 dock.lengthMode = "fit";
 dock.alignment = "center";

@@ -41,7 +41,7 @@ sudo cp -rT "$src/usr/bin" /usr/bin
 sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
-[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh
+[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --restart-shell
 
 if [ "$login" = 1 ]; then
   echo "Restarting SDDM (this logs you out)..."
