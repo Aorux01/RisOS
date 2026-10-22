@@ -107,7 +107,7 @@ fun layout() {
     # Smaller logo, wider bar, more room between them.
     logo = global.logo_src.Scale(168 * k, 168 * k);
     place_centered(global.logo_sprite, logo, 556 * k - 84 * k);
-    global.bar_w = 340 * k;
+    global.bar_w = 460 * k;
     global.bar_y = 766 * k;
   }
   global.bar_x = global.cx - global.bar_w / 2;
@@ -148,16 +148,18 @@ if (is_update) {
 fun refresh() {
   if (Window.GetWidth() != global.sw || Window.GetHeight() != global.sh) layout();
   if (!global.is_update) {
-    # Boot progress is not reliable: a segment glides back and forth along the track.
-    # It stretches while it moves fast and squeezes as it reaches the edges.
+    # Boot progress is not reliable, so the bar loops on its own. The head of the segment
+    # leaves first and the tail follows, so it stretches out then catches up, always moving
+    # left to right (no reversing, no dwelling at the edges).
     global.tick++;
-    t = global.tick / 50;                          # ~50 refreshes per second
-    a = t * 3.14159 / 1.1;
-    pos = (1 - Math.Cos(a)) / 2;                   # 0 -> 1 -> 0, one cycle every 2.2 s
-    speed = Math.Sin(a);
-    if (speed < 0) speed = -speed;
-    seg_w = global.bar_w * (0.12 + 0.34 * speed);
-    set_fill(global.bar_x + (global.bar_w - seg_w) * pos, seg_w);
+    p = (global.tick % 90) / 90;                   # ~50 refreshes per second: 1.8 s per loop
+    h = p / 0.7;
+    if (h > 1) h = 1;
+    h = h * h * (3 - 2 * h);                       # smoothstep
+    l = (p - 0.3) / 0.7;
+    if (l < 0) l = 0;
+    l = l * l * (3 - 2 * l);
+    set_fill(global.bar_x + l * global.bar_w, (h - l) * global.bar_w);
   }
 }
 Plymouth.SetRefreshFunction(refresh);
