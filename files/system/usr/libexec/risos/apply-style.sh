@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Apply the RisOS look to the current user: icons, window frame, lock screen.
+# Run by first-login.sh for new users, and by hand (or risos-dev-sync) to try changes.
+set -uo pipefail
+
+# Icons: colored tiles for the core apps, Breeze for the rest.
+kwriteconfig6 --file kdeglobals --group Icons --key Theme RisOS
+/usr/libexec/plasma-changeicons RisOS 2>/dev/null || true
+
+# Window frame: RisOS Aurorae theme, buttons on the right.
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme __aurorae__svg__RisOS
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft ""
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight IAX
+busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
+
+# Lock screen: the RisOS wallpaper instead of KDE's "picture of the day".
+kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.kde.image
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \
+  --key Image file:///usr/share/wallpapers/RisOS/contents/images/2560x1600.svg
+
+# The RisOS bar has no global menu, so apps keep their own menu bar.
+kwriteconfig6 --file kded6rc --group Module-appmenu --key autoload false

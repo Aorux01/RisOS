@@ -9,7 +9,8 @@
 #
 # Usage (inside the VM):
 #   risos-dev-sync                 apply the latest files
-#   risos-dev-sync --shell         ... and (re)start the RisOS shell (needs quickshell installed)
+#   risos-dev-sync --style         ... and apply icons, window frame and lock screen
+#   risos-dev-sync --shell         ... and (re)start the RisOS shell (needs quickshell installed); implies --style
 #   risos-dev-sync --layout        ... and rebuild the old Plasma top bar and dock
 #   risos-dev-sync --login         ... and restart SDDM to see the login screen (logs you out)
 #   risos-dev-sync --layout --login
@@ -21,8 +22,10 @@ branch=main
 layout=0
 login=0
 shell=0
+style=0
 for arg in "$@"; do
   case "$arg" in
+    --style) style=1 ;;
     --layout) layout=1 ;;
     --shell) shell=1 ;;
     --login|--restart-sddm) login=1 ;;
@@ -45,6 +48,10 @@ sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
 [ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --plasma --restart-shell
+
+if [ "$style" = 1 ] || [ "$shell" = 1 ]; then
+  /usr/libexec/risos/apply-style.sh
+fi
 
 if [ "$shell" = 1 ]; then
   # Remove Plasma's panels, then (re)start the RisOS shell in the background.

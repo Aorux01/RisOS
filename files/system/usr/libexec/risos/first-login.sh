@@ -10,6 +10,9 @@ kwriteconfig6 --file kdeglobals --group General --key menuFont "Figtree,10,-1,5,
 kwriteconfig6 --file kdeglobals --group General --key toolBarFont "Figtree,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 kwriteconfig6 --file kdeglobals --group WM --key activeFont "Figtree,10,-1,5,600,0,0,0,0,0,0,0,0,0,0,1"
 
+# Icons, window frame, lock screen.
+/usr/libexec/risos/apply-style.sh
+
 # Top bar and floating dock.
 /usr/libexec/risos/apply-layout.sh
 
