@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Io
 import QtQuick
 
 // RisOS shell prototype: top bar, floating dock and popups, drawn after the mockups in style/.
@@ -41,9 +42,22 @@ ShellRoot {
         tr: texts
     }
 
+    // The RisOS lock screen is still a prototype: it only runs when ~/.config/risos/own-lock exists.
+    // Otherwise "Lock screen" uses Plasma's, so a bug here can never leave the session stuck.
+    Process {
+        id: lockCheck
+        command: ["test", "-e", Quickshell.env("HOME") + "/.config/risos/own-lock"]
+        onExited: function (exitCode) {
+            if (exitCode === 0)
+                lockScreen.lock()
+            else
+                Quickshell.execDetached(["loginctl", "lock-session"])
+        }
+    }
+
     Connections {
         target: uiState
-        function onLockRequested() { lockScreen.lock() }
+        function onLockRequested() { lockCheck.running = true }
     }
 
     Variants {

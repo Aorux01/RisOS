@@ -20,6 +20,15 @@ Scope {
         failed = false
         session.locked = true
         fallback.restart()
+        safety.restart()
+    }
+
+    // Prototype safety net: release the lock by itself after 45 seconds, so a screen that fails to
+    // draw can never trap the session. Remove this timer once the lock screen is proven.
+    Timer {
+        id: safety
+        interval: 45000
+        onTriggered: session.locked = false
     }
 
     function unlock(password) {
