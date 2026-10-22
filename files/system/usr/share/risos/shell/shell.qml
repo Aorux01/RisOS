@@ -1,12 +1,15 @@
 import Quickshell
 import QtQuick
 
-// RisOS shell prototype: top bar and floating dock, drawn after style/Bureau, fichiers — clair@2x.png.
+// RisOS shell prototype: top bar, floating dock and popups, drawn after the mockups in style/.
 // Run with /usr/libexec/risos/start-shell.sh. Quickshell reloads the files as they change.
 ShellRoot {
-    // Not named "pal" or "windows": inside TopBar and Dock those are their own properties, so
-    // "pal: pal" would bind a property to itself and leave every design token empty.
+    // The ids differ from the property names on purpose: inside TopBar, Dock and Overlay, "pal",
+    // "tr", "ui" and "windows" are their own properties, so "pal: pal" would bind a property to
+    // itself and leave every design token empty.
     Pal { id: theme }
+    I18n { id: texts }
+    ShellState { id: uiState }
 
     Loader {
         id: winSource
@@ -17,7 +20,8 @@ ShellRoot {
         model: Quickshell.screens
         TopBar {
             pal: theme
-            windows: winSource
+            tr: texts
+            ui: uiState
         }
     }
 
@@ -25,7 +29,18 @@ ShellRoot {
         model: Quickshell.screens
         Dock {
             pal: theme
+            tr: texts
+            ui: uiState
             windows: winSource
+        }
+    }
+
+    Variants {
+        model: Quickshell.screens
+        Overlay {
+            pal: theme
+            tr: texts
+            ui: uiState
         }
     }
 }

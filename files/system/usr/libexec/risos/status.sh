@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Print the battery and network state for the shell, one line each:
+# Print the state the shell needs, one line each:
 #   battery <percent|none> <status>
 #   net <none|wifi|wired> <wifi level 0..3>
-# Anything that cannot be read is reported as "none".
+#   theme <light|dark>
+#   lang <two letters>
+# Anything that cannot be read is reported as "none" or left out.
 
 bat="none"
 for b in /sys/class/power_supply/BAT*; do
@@ -34,3 +36,12 @@ for dir in /sys/class/net/*; do
   fi
 done
 echo "net $kind $level"
+
+theme=$(cat "$HOME/.config/risos/theme" 2>/dev/null)
+echo "theme ${theme:-light}"
+
+# Language: the user's Plasma setting first, then the environment.
+lang=$(awk -F= '/^LANGUAGE=/ {print $2; exit}' "$HOME/.config/plasma-localerc" 2>/dev/null)
+[ -n "$lang" ] || lang=$(awk -F= '/^LANG=/ {print $2; exit}' "$HOME/.config/plasma-localerc" 2>/dev/null)
+[ -n "$lang" ] || lang="${LANGUAGE:-${LC_ALL:-${LC_MESSAGES:-${LANG:-en}}}}"
+echo "lang ${lang:0:2}"

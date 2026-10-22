@@ -18,6 +18,10 @@ kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft ""
 kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight IAX
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
 
+# Window titles: Figtree, semibold.
+kwriteconfig6 --file kdeglobals --group WM --key activeFont "Figtree,11,-1,5,600,0,0,0,0,0,0,0,0,0,0,1"
+kwriteconfig6 --file kdeglobals --group WM --key inactiveFont "Figtree,11,-1,5,500,0,0,0,0,0,0,0,0,0,0,1"
+
 # Lock screen: the RisOS wallpaper instead of KDE's "picture of the day".
 kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.kde.image
 kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \

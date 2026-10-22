@@ -12,6 +12,7 @@ Item {
     property int windowCount: 0
 
     signal clicked()
+    signal contextRequested()
 
     width: size
     height: size
@@ -68,6 +69,12 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: root.clicked()
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: function (mouse) {
+            if (mouse.button === Qt.RightButton)
+                root.contextRequested()
+            else
+                root.clicked()
+        }
     }
 }

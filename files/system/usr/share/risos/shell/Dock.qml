@@ -8,6 +8,8 @@ PanelWindow {
 
     required property var modelData
     required property QtObject pal
+    required property QtObject tr
+    required property QtObject ui
     required property var windows   // Loader of Windows.qml
 
     readonly property real tile: 52 * pal.u
@@ -25,14 +27,14 @@ PanelWindow {
 
     // Pinned apps. Entries that are not installed yet are placeholders and do nothing when clicked.
     readonly property var pinned: [
-        { name: "Files",    icon: "folder",   tint: pal.blue,   id: "org.kde.dolphin" },
-        { name: "Web",      icon: "globe",    tint: pal.teal,   id: "org.mozilla.firefox" },
-        { name: "Store",    icon: "bag",      tint: pal.coral,  id: "org.kde.discover" },
-        { name: "Messages", icon: "chat",     tint: pal.green,  id: "" },
-        { name: "Phone",    icon: "phone",    tint: pal.violet, id: "" },
-        { name: "Meet",     icon: "video",    tint: pal.pink,   id: "" },
-        { name: "Notes",    icon: "note",     tint: pal.ochre,  id: "" },
-        { name: "Terminal", icon: "terminal", tint: pal.slate,  id: "org.kde.konsole" }
+        { name: tr.t("files"),    icon: "folder",   tint: pal.blue,   id: "org.kde.dolphin" },
+        { name: tr.t("web"),      icon: "globe",    tint: pal.teal,   id: "org.mozilla.firefox" },
+        { name: tr.t("store"),    icon: "bag",      tint: pal.coral,  id: "org.kde.discover" },
+        { name: tr.t("messages"), icon: "chat",     tint: pal.green,  id: "" },
+        { name: tr.t("phone"),    icon: "phone",    tint: pal.violet, id: "" },
+        { name: tr.t("meet"),     icon: "video",    tint: pal.pink,   id: "" },
+        { name: tr.t("notes"),    icon: "note",     tint: pal.ochre,  id: "" },
+        { name: tr.t("terminal"), icon: "terminal", tint: pal.slate,  id: "org.kde.konsole" }
     ]
 
     // Number of open windows of an app (0 when unknown or when the window list is unavailable).
@@ -48,6 +50,15 @@ PanelWindow {
         var entry = DesktopEntries.byId(desktopId)
         if (entry)
             entry.execute()
+    }
+
+    // Right click: open the dock menu above the icon.
+    function openMenu(item, app) {
+        var p = item.mapToItem(null, item.width / 2, 0)
+        ui.anchorX = (dock.screen.width - dock.width) / 2 + p.x
+        ui.anchorY = dock.screen.height - bottomGap - implicitHeight
+        ui.app = { name: app.name, id: app.id }
+        ui.mode = "dockmenu"
     }
 
     Rectangle {
@@ -66,6 +77,7 @@ PanelWindow {
         Repeater {
             model: dock.pinned
             delegate: Tile {
+                id: pinnedTile
                 required property var modelData
                 size: dock.tile
                 radiusPx: 14 * pal.u
@@ -73,6 +85,7 @@ PanelWindow {
                 glyph: "icons/" + modelData.icon + ".svg"
                 windowCount: dock.windowCount(modelData.id)
                 onClicked: dock.launch(modelData.id)
+                onContextRequested: dock.openMenu(pinnedTile, modelData)
             }
         }
 
@@ -88,6 +101,7 @@ PanelWindow {
             radiusPx: 14 * pal.u
             tint: pal.gray
             glyph: "icons/grid.svg"
+            onClicked: ui.toggle("launcher")
         }
         Tile {
             size: dock.tile

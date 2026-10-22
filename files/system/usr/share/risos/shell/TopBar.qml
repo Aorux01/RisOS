@@ -2,13 +2,15 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 
-// Top bar. Left: logo, name of the active app. Right: network, battery, date and time.
+// Top bar. Left: the logo, which opens the system menu. Right: network, battery, date and time;
+// clicking them opens the quick settings.
 PanelWindow {
     id: bar
 
     required property var modelData
     required property QtObject pal
-    required property var windows   // Loader of Windows.qml
+    required property QtObject tr
+    required property QtObject ui
 
     screen: modelData
     anchors {
@@ -34,7 +36,7 @@ PanelWindow {
         precision: SystemClock.Minutes
     }
 
-    // Battery and network come from a small script (see /usr/libexec/risos/status.sh).
+    // Battery, network, theme and language come from a small script (see status.sh).
     Process {
         id: statusProc
         command: ["/usr/libexec/risos/status.sh"]
@@ -50,6 +52,10 @@ PanelWindow {
                     } else if (p[0] === "net") {
                         bar.netKind = p[1]
                         bar.wifiLevel = parseInt(p[2])
+                    } else if (p[0] === "theme") {
+                        bar.pal.dark = p[1] === "dark"
+                    } else if (p[0] === "lang" && p[1] && p[1].length >= 2) {
+                        bar.tr.lang = p[1].substring(0, 2).toLowerCase()
                     }
                 }
             }
@@ -60,14 +66,6 @@ PanelWindow {
         running: true
         repeat: true
         onTriggered: statusProc.running = true
-    }
-
-    // Name of the active application. Falls back to "RisOS" when no window is focused or when the
-    // window list is unavailable.
-    readonly property string appName: {
-        if (!windows.item || windows.item.activeName === "")
-            return "RisOS"
-        return windows.item.activeName
     }
 
     // ---- Look ----------------------------------------------------------------------------
@@ -84,91 +82,119 @@ PanelWindow {
         }
     }
 
-    // Left
-    Row {
+    // Left: logo, opens the system menu
+    Item {
+        id: logoButton
         anchors.left: parent.left
-        anchors.leftMargin: 16 * pal.u
+        anchors.leftMargin: 10 * pal.u
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 8 * pal.u
+        width: 40 * pal.u
+        height: 32 * pal.u
 
+        Rectangle {
+            anchors.fill: parent
+            radius: 9 * pal.u
+            color: ui.mode === "system" || logoArea.containsMouse ? pal.rowHover : "transparent"
+        }
         Image {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 30 * pal.u
-            height: 30 * pal.u
-            source: "icons/glyph.svg"
+            anchors.centerIn: parent
+            width: 28 * pal.u
+            height: 28 * pal.u
+            source: pal.dark ? "icons/glyph-light.svg" : "icons/glyph.svg"
             sourceSize: Qt.size(64, 64)
         }
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: bar.appName
-            color: pal.ink
-            font.family: pal.font
-            font.pixelSize: bar.fontPx
-            font.weight: Font.Bold
+        MouseArea {
+            id: logoArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: ui.toggle("system")
         }
     }
 
-    // Right
-    Row {
+    // Right: status and clock, opens the quick settings
+    Item {
+        id: statusButton
         anchors.right: parent.right
-        anchors.rightMargin: 22 * pal.u
+        anchors.rightMargin: 10 * pal.u
         anchors.verticalCenter: parent.verticalCenter
-        spacing: bar.gap
+        height: 32 * pal.u
+        width: statusRow.implicitWidth + 24 * pal.u
 
-        EthernetIcon {
-            anchors.verticalCenter: parent.verticalCenter
-            visible: bar.netKind === "wired"
-            width: 20 * pal.u
-            height: 20 * pal.u
-            color: pal.ink
+        Rectangle {
+            anchors.fill: parent
+            radius: 9 * pal.u
+            color: ui.mode === "quick" || statusArea.containsMouse ? pal.rowHover : "transparent"
         }
-        WifiIcon {
-            anchors.verticalCenter: parent.verticalCenter
-            visible: bar.netKind !== "wired"
-            width: 20 * pal.u
-            height: 20 * pal.u
-            color: pal.ink
-            level: bar.wifiLevel
-            offline: bar.netKind === "none"
-        }
+
         Row {
-            anchors.verticalCenter: parent.verticalCenter
-            visible: bar.batteryPercent >= 0
-            spacing: 8 * pal.u
-            Text {
+            id: statusRow
+            anchors.centerIn: parent
+            spacing: bar.gap
+
+            EthernetIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                text: bar.batteryPercent + "%"
-                color: pal.inkSoft
-                font.family: pal.font
-                font.pixelSize: bar.fontPx * 0.9
-            }
-            BatteryIcon {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 28 * pal.u
+                visible: bar.netKind === "wired"
+                width: 20 * pal.u
                 height: 20 * pal.u
                 color: pal.ink
-                percent: bar.batteryPercent
-                charging: bar.charging
+            }
+            WifiIcon {
+                anchors.verticalCenter: parent.verticalCenter
+                visible: bar.netKind !== "wired"
+                width: 20 * pal.u
+                height: 20 * pal.u
+                color: pal.ink
+                level: bar.wifiLevel
+                offline: bar.netKind === "none"
+            }
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                visible: bar.batteryPercent >= 0
+                spacing: 6 * pal.u
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: bar.batteryPercent + "%"
+                    color: pal.inkSoft
+                    font.family: pal.font
+                    font.pixelSize: bar.fontPx * 0.9
+                }
+                BatteryIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 28 * pal.u
+                    height: 20 * pal.u
+                    color: pal.ink
+                    percent: bar.batteryPercent
+                    charging: bar.charging
+                }
+            }
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 12 * pal.u
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: tr.dateText(clock.date, "ddd d MMM")
+                    color: pal.inkSoft
+                    font.family: pal.font
+                    font.pixelSize: bar.fontPx
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: tr.dateText(clock.date, "hh:mm")
+                    color: pal.ink
+                    font.family: pal.font
+                    font.pixelSize: bar.fontPx
+                    font.weight: Font.Bold
+                }
             }
         }
-        Row {
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: 12 * pal.u
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: Qt.formatDate(clock.date, "ddd d MMM")
-                color: pal.inkSoft
-                font.family: pal.font
-                font.pixelSize: bar.fontPx
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: Qt.formatTime(clock.date, "hh:mm")
-                color: pal.ink
-                font.family: pal.font
-                font.pixelSize: bar.fontPx
-                font.weight: Font.Bold
-            }
+
+        MouseArea {
+            id: statusArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: ui.toggle("quick")
         }
     }
 }
