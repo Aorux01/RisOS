@@ -22,6 +22,7 @@ curl -fsSL "https://codeload.github.com/$repo/tar.gz/refs/heads/$branch" | tar -
 src="$tmp/${repo#*/}-$branch/files/system"
 
 sudo cp -rT "$src/usr/share" /usr/share
+sudo cp -rT "$src/usr/libexec" /usr/libexec
 sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
