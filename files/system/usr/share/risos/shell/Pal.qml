@@ -15,7 +15,7 @@ QtObject {
 
     // Text and icons
     property color ink: "#22262f"
-    property color inkSoft: Qt.rgba(0.133, 0.149, 0.184, 0.62)
+    property color inkSoft: Qt.rgba(0.133, 0.149, 0.184, 0.72)
 
     // Dock tiles (from style/tokens.json)
     readonly property color blue: "#648aad"

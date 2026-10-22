@@ -1,6 +1,7 @@
 import QtQuick
 
-// One dock icon: a rounded colored tile with a white glyph, and a dot below when the app runs.
+// One dock icon: a rounded colored tile with a white glyph.
+// Below it: a dot when the app has a window, plus a fainter one behind it for two or more.
 Item {
     id: root
 
@@ -8,7 +9,7 @@ Item {
     property real radiusPx: 14
     property color tint: "#648aad"
     property url glyph
-    property bool running: false
+    property int windowCount: 0
 
     signal clicked()
 
@@ -37,16 +38,29 @@ Item {
         }
     }
 
+    readonly property real dot: Math.max(4, root.size * 0.09)
+
+    // Second dot, fainter and tucked behind the first one (two or more windows).
     Rectangle {
-        visible: root.running
-        width: Math.max(4, root.size * 0.09)
+        visible: root.windowCount >= 2
+        width: root.dot * 0.8
         height: width
         radius: width / 2
         color: "#22262f"
-        opacity: 0.55
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.bottom
-        anchors.topMargin: Math.round(root.size * 0.07)
+        opacity: 0.25
+        x: (root.width - width) / 2 + root.dot * 1.1
+        y: root.height + Math.round(root.size * 0.07) + (root.dot - height) / 2
+    }
+
+    Rectangle {
+        visible: root.windowCount >= 1
+        width: root.dot
+        height: width
+        radius: width / 2
+        color: "#22262f"
+        opacity: 0.6
+        x: (root.width - width) / 2 - (root.windowCount >= 2 ? root.dot * 0.35 : 0)
+        y: root.height + Math.round(root.size * 0.07)
     }
 
     MouseArea {

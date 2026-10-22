@@ -1,6 +1,5 @@
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
 import QtQuick
 
 // Top bar. Left: logo, name of the active app. Right: network, battery, date and time.
@@ -9,6 +8,7 @@ PanelWindow {
 
     required property var modelData
     required property QtObject pal
+    required property var windows   // Loader of Windows.qml
 
     screen: modelData
     anchors {
@@ -26,8 +26,8 @@ PanelWindow {
     property string netKind: "none"   // none | wifi | wired
     property int wifiLevel: 0
 
-    readonly property real fontPx: 14 * pal.u
-    readonly property real gap: 36 * pal.u   // spacing between the right-hand items, as in the mockup
+    readonly property real fontPx: 15 * pal.u
+    readonly property real gap: 24 * pal.u   // spacing between the right-hand items
 
     SystemClock {
         id: clock
@@ -62,13 +62,12 @@ PanelWindow {
         onTriggered: statusProc.running = true
     }
 
-    // Name of the active application. Falls back to "RisOS" when the compositor does not report it.
+    // Name of the active application. Falls back to "RisOS" when no window is focused or when the
+    // window list is unavailable.
     readonly property string appName: {
-        var top = ToplevelManager.activeToplevel
-        if (!top || !top.appId)
+        if (!windows.item || windows.item.activeName === "")
             return "RisOS"
-        var entry = DesktopEntries.heuristicLookup(top.appId)
-        return entry && entry.name ? entry.name : top.appId
+        return windows.item.activeName
     }
 
     // ---- Look ----------------------------------------------------------------------------
@@ -88,14 +87,14 @@ PanelWindow {
     // Left
     Row {
         anchors.left: parent.left
-        anchors.leftMargin: 18 * pal.u
+        anchors.leftMargin: 16 * pal.u
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 16 * pal.u
+        spacing: 8 * pal.u
 
         Image {
             anchors.verticalCenter: parent.verticalCenter
-            width: 22 * pal.u
-            height: 22 * pal.u
+            width: 30 * pal.u
+            height: 30 * pal.u
             source: "icons/glyph.svg"
             sourceSize: Qt.size(64, 64)
         }
@@ -154,7 +153,7 @@ PanelWindow {
         }
         Row {
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 18 * pal.u
+            spacing: 12 * pal.u
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: Qt.formatDate(clock.date, "ddd d MMM")

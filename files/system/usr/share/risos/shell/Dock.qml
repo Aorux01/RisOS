@@ -1,5 +1,4 @@
 import Quickshell
-import Quickshell.Wayland
 import QtQuick
 
 // Floating dock. Left: pinned apps. Then a separator, the app launcher and the trash.
@@ -9,6 +8,7 @@ PanelWindow {
 
     required property var modelData
     required property QtObject pal
+    required property var windows   // Loader of Windows.qml
 
     readonly property real tile: 52 * pal.u
     readonly property real gap: 13 * pal.u
@@ -35,15 +35,11 @@ PanelWindow {
         { name: "Terminal", icon: "terminal", tint: pal.slate,  id: "org.kde.konsole" }
     ]
 
-    function isRunning(desktopId) {
-        if (desktopId === "")
-            return false
-        var list = ToplevelManager.toplevels.values
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].appId && list[i].appId.toLowerCase() === desktopId.toLowerCase())
-                return true
-        }
-        return false
+    // Number of open windows of an app (0 when unknown or when the window list is unavailable).
+    function windowCount(desktopId) {
+        if (desktopId === "" || !windows.item)
+            return 0
+        return windows.item.counts[desktopId.toLowerCase()] || 0
     }
 
     function launch(desktopId) {
@@ -75,7 +71,7 @@ PanelWindow {
                 radiusPx: 14 * pal.u
                 tint: modelData.tint
                 glyph: "icons/" + modelData.icon + ".svg"
-                running: dock.isRunning(modelData.id)
+                windowCount: dock.windowCount(modelData.id)
                 onClicked: dock.launch(modelData.id)
             }
         }

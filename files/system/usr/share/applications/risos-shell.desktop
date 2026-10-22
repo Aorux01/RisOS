@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=RisOS shell
+Comment=Top bar and dock
+Exec=/usr/bin/quickshell
+NoDisplay=true
+X-KDE-Wayland-Interfaces=org_kde_plasma_window_management,org_kde_plasma_virtual_desktop
