@@ -56,7 +56,7 @@ PanelWindow {
     property string wifiState: "none"
     property string wifiName: ""
     property string btState: "none"
-    property real volume: 0.5
+    property real volume: -1   // -1 when it cannot be read: the slider is hidden
     property string dndState: "off"
     property real brightness: -1   // -1 when there is no backlight
 
@@ -76,7 +76,7 @@ PanelWindow {
                     } else if (p[0] === "bluetooth") {
                         overlay.btState = p[1]
                     } else if (p[0] === "volume") {
-                        overlay.volume = parseFloat(p[1])
+                        overlay.volume = p[1] === "none" ? -1 : parseFloat(p[1])
                     } else if (p[0] === "dnd") {
                         overlay.dndState = p[1]
                     } else if (p[0] === "brightness") {
@@ -99,7 +99,9 @@ PanelWindow {
     Timer {
         id: volumeSend
         interval: 120
-        onTriggered: Quickshell.execDetached(["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", overlay.volume.toFixed(2)])
+        onTriggered: Quickshell.execDetached(["sh", "-c",
+            "wpctl set-volume @DEFAULT_AUDIO_SINK@ " + overlay.volume.toFixed(2)
+            + " || pactl set-sink-volume @DEFAULT_SINK@ " + Math.round(overlay.volume * 100) + "%"])
     }
 
     // ---- Launcher state ------------------------------------------------------------------
@@ -198,11 +200,12 @@ PanelWindow {
             x: 14 * u
             y: 14 * u
             width: parent.width - 28 * u
-            spacing: 12 * u
+            spacing: 10 * u
 
             Row {
-                spacing: 12 * u
+                spacing: 10 * u
                 QuickTile {
+                    width: Math.floor((quickColumn.width - 10 * u) / 2)
                     pal: overlay.pal
                     iconPaths: icons.wifi
                     title: tr.t("wifi")
@@ -216,6 +219,7 @@ PanelWindow {
                     }
                 }
                 QuickTile {
+                    width: Math.floor((quickColumn.width - 10 * u) / 2)
                     pal: overlay.pal
                     iconPaths: icons.bluetooth
                     title: tr.t("bluetooth")
@@ -229,8 +233,9 @@ PanelWindow {
                 }
             }
             Row {
-                spacing: 12 * u
+                spacing: 10 * u
                 QuickTile {
+                    width: Math.floor((quickColumn.width - 10 * u) / 2)
                     pal: overlay.pal
                     iconPaths: icons.bell
                     title: tr.t("dnd")
@@ -245,6 +250,7 @@ PanelWindow {
                     }
                 }
                 QuickTile {
+                    width: Math.floor((quickColumn.width - 10 * u) / 2)
                     pal: overlay.pal
                     iconPaths: icons.moon
                     title: tr.t("theme")
@@ -257,7 +263,7 @@ PanelWindow {
             Item {
                 visible: overlay.brightness >= 0
                 width: parent.width
-                height: visible ? 34 * u : 0
+                height: visible ? 30 * u : 0
 
                 Glyph {
                     id: sunGlyph
@@ -296,8 +302,9 @@ PanelWindow {
 
             // Volume
             Item {
+                visible: overlay.volume >= 0
                 width: parent.width
-                height: 34 * u
+                height: visible ? 30 * u : 0
 
                 Glyph {
                     anchors.verticalCenter: parent.verticalCenter
