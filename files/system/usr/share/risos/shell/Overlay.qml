@@ -57,6 +57,10 @@ PanelWindow {
     property string wifiName: ""
     property string btState: "none"
     property real volume: 0.5
+    property string dndState: "off"
+    property real brightness: -1   // -1 when there is no backlight
+
+    Icons { id: icons }
 
     Process {
         id: quickProc
@@ -73,6 +77,10 @@ PanelWindow {
                         overlay.btState = p[1]
                     } else if (p[0] === "volume") {
                         overlay.volume = parseFloat(p[1])
+                    } else if (p[0] === "dnd") {
+                        overlay.dndState = p[1]
+                    } else if (p[0] === "brightness") {
+                        overlay.brightness = p[1] === "none" ? -1 : parseFloat(p[1])
                     }
                 }
             }
@@ -82,6 +90,11 @@ PanelWindow {
         id: refreshSoon
         interval: 900
         onTriggered: quickProc.running = true
+    }
+    Timer {
+        id: brightnessSend
+        interval: 150
+        onTriggered: Quickshell.execDetached(["brightnessctl", "set", Math.round(overlay.brightness * 100) + "%"])
     }
     Timer {
         id: volumeSend
@@ -96,12 +109,12 @@ PanelWindow {
         var list = DesktopEntries.applications.values
         for (var i = 0; i < list.length; i++)
             out.push(list[i])
-        out.sort(function (a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 })
+        out.sort(function (a, b) { return overlay.tr.appName(a).toLowerCase() < overlay.tr.appName(b).toLowerCase() ? -1 : 1 })
         return out
     }
     readonly property var shownApps: {
         var q = query.toLowerCase()
-        return q === "" ? allApps : allApps.filter(function (a) { return a.name.toLowerCase().indexOf(q) >= 0 })
+        return q === "" ? allApps : allApps.filter(function (a) { return overlay.tr.appName(a).toLowerCase().indexOf(q) >= 0 || a.name.toLowerCase().indexOf(q) >= 0 })
     }
 
     Connections {
@@ -153,7 +166,7 @@ PanelWindow {
             MenuRow { pal: overlay.pal; label: tr.t("settings"); onTriggered: overlay.run(["systemsettings"]) }
             MenuRow { pal: overlay.pal; label: tr.t("store"); onTriggered: overlay.run(["plasma-discover"]) }
             Rectangle { width: parent.width; height: 1; color: pal.separator }
-            MenuRow { pal: overlay.pal; label: tr.t("lock"); onTriggered: overlay.run(["loginctl", "lock-session"]) }
+            MenuRow { pal: overlay.pal; label: tr.t("lock"); onTriggered: { overlay.ui.close(); overlay.ui.lockRequested() } }
             MenuRow { pal: overlay.pal; label: tr.t("sleep"); onTriggered: overlay.run(["systemctl", "suspend"]) }
             MenuRow { pal: overlay.pal; label: tr.t("restart"); onTriggered: overlay.run(["systemctl", "reboot"]) }
             MenuRow { pal: overlay.pal; label: tr.t("shutdown"); onTriggered: overlay.run(["systemctl", "poweroff"]) }
@@ -191,6 +204,7 @@ PanelWindow {
                 spacing: 12 * u
                 QuickTile {
                     pal: overlay.pal
+                    iconPaths: icons.wifi
                     title: tr.t("wifi")
                     subtitle: overlay.wifiState === "on" ? (overlay.wifiName !== "" ? overlay.wifiName : tr.t("on"))
                               : (overlay.wifiState === "off" ? tr.t("off") : tr.t("wired"))
@@ -203,8 +217,9 @@ PanelWindow {
                 }
                 QuickTile {
                     pal: overlay.pal
+                    iconPaths: icons.bluetooth
                     title: tr.t("bluetooth")
-                    subtitle: overlay.btState === "on" ? tr.t("on") : tr.t("off")
+                    subtitle: overlay.btState === "on" ? tr.t("on") : (overlay.btState === "off" ? tr.t("off") : tr.t("unavailable"))
                     active: overlay.btState === "on"
                     enabledTile: overlay.btState !== "none"
                     onClicked: {
@@ -217,33 +232,88 @@ PanelWindow {
                 spacing: 12 * u
                 QuickTile {
                     pal: overlay.pal
+                    iconPaths: icons.bell
+                    title: tr.t("dnd")
+                    subtitle: overlay.dndState === "on" ? tr.t("on") : tr.t("off")
+                    active: overlay.dndState === "on"
+                    onClicked: {
+                        var on = overlay.dndState !== "on"
+                        overlay.dndState = on ? "on" : "off"
+                        Quickshell.execDetached(on
+                            ? ["kwriteconfig6", "--file", "plasmanotifyrc", "--group", "DoNotDisturb", "--key", "Until", "2099-12-31T23:59:00"]
+                            : ["kwriteconfig6", "--file", "plasmanotifyrc", "--group", "DoNotDisturb", "--key", "Until", "--delete"])
+                    }
+                }
+                QuickTile {
+                    pal: overlay.pal
+                    iconPaths: icons.moon
                     title: tr.t("theme")
                     subtitle: pal.dark ? tr.t("dark") : tr.t("light")
                     onClicked: overlay.toggleTheme()
                 }
-                QuickTile {
-                    pal: overlay.pal
-                    title: tr.t("settings")
-                    subtitle: ""
-                    onClicked: overlay.run(["systemsettings"])
+            }
+
+            // Brightness (only when the machine has a backlight)
+            Item {
+                visible: overlay.brightness >= 0
+                width: parent.width
+                height: visible ? 34 * u : 0
+
+                Glyph {
+                    id: sunGlyph
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: 4 * u
+                    size: 20 * u
+                    p0: icons.sun[0]; p1: icons.sun[1]; p2: icons.sun[2]; p3: icons.sun[3]
+                    color: pal.ink
+                }
+                Rectangle {
+                    id: brightTrack
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: 40 * u
+                    width: parent.width - 48 * u
+                    height: 8 * u
+                    radius: height / 2
+                    color: pal.track
+
+                    Rectangle {
+                        width: parent.width * Math.max(0, Math.min(1, overlay.brightness))
+                        height: parent.height
+                        radius: height / 2
+                        color: pal.tileOn
+                    }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    function setFrom(mouseX) {
+                        overlay.brightness = Math.max(0.05, Math.min(1, (mouseX - brightTrack.x) / brightTrack.width))
+                        brightnessSend.restart()
+                    }
+                    onPressed: function (mouse) { setFrom(mouse.x) }
+                    onPositionChanged: function (mouse) { if (pressed) setFrom(mouse.x) }
                 }
             }
 
             // Volume
             Item {
                 width: parent.width
-                height: 30 * u
+                height: 34 * u
 
+                Glyph {
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: 4 * u
+                    size: 20 * u
+                    p0: icons.speaker[0]; p1: icons.speaker[1]; p2: icons.speaker[2]; p3: icons.speaker[3]
+                    color: pal.ink
+                }
                 Rectangle {
                     id: volumeTrack
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 4 * u
-                    anchors.rightMargin: 4 * u
-                    height: 6 * u
+                    x: 40 * u
+                    width: parent.width - 48 * u
+                    height: 8 * u
                     radius: height / 2
-                    color: pal.tileOff
+                    color: pal.track
 
                     Rectangle {
                         width: parent.width * Math.max(0, Math.min(1, overlay.volume))
@@ -380,7 +450,7 @@ PanelWindow {
                     width: parent.width - 12 * u
                     horizontalAlignment: Text.AlignHCenter
                     elide: Text.ElideRight
-                    text: cell.modelData.name
+                    text: overlay.tr.appName(cell.modelData)
                     color: pal.ink
                     font.family: pal.font
                     font.pixelSize: 14 * u

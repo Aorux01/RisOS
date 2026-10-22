@@ -20,6 +20,7 @@ PanelWindow {
     }
     implicitHeight: Math.round(40 * pal.u)
     exclusiveZone: implicitHeight
+    aboveWindows: false   // the transparent Plasma panel that shows the app menus sits above
     color: "transparent"
 
     // ---- State ---------------------------------------------------------------------------

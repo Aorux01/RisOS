@@ -9,6 +9,8 @@ Item {
 
     property string activeAppId: ""
     property string activeName: ""
+    property bool activeMaximized: false
+    property bool activeFullscreen: false
     property var counts: ({})   // app id (lowercase, no ".desktop") -> number of windows
 
     TaskManager.TasksModel {
@@ -24,6 +26,8 @@ Item {
         var c = {}
         var active = ""
         var name = ""
+        var maximized = false
+        var fullscreen = false
         for (var i = 0; i < tasks.count; i++) {
             var idx = tasks.index(i, 0)
             var id = norm(tasks.data(idx, TaskManager.AbstractTasksModel.AppId))
@@ -33,11 +37,15 @@ Item {
             if (tasks.data(idx, TaskManager.AbstractTasksModel.IsActive)) {
                 active = id
                 name = tasks.data(idx, TaskManager.AbstractTasksModel.AppName) || ""
+                maximized = !!tasks.data(idx, TaskManager.AbstractTasksModel.IsMaximized)
+                fullscreen = !!tasks.data(idx, TaskManager.AbstractTasksModel.IsFullScreen)
             }
         }
         counts = c
         activeAppId = active
         activeName = name
+        activeMaximized = maximized
+        activeFullscreen = fullscreen
     }
 
     Timer {

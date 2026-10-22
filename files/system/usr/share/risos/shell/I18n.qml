@@ -24,6 +24,10 @@ QtObject {
         "logout": "Fermer la session de %1",
         "wifi": "Wi-Fi",
         "bluetooth": "Bluetooth",
+        "password": "Mot de passe",
+        "wrong_password": "Mot de passe incorrect",
+        "dnd": "Ne pas déranger",
+        "unavailable": "Indisponible",
         "theme": "Thème",
         "light": "Clair",
         "dark": "Sombre",
@@ -36,11 +40,10 @@ QtObject {
         "new_window": "Nouvelle fenêtre",
         "open": "Ouvrir",
         "files": "Fichiers",
-        "web": "Navigateur",
-        "messages": "Messages",
-        "phone": "Téléphone",
-        "meet": "Visio",
-        "notes": "Notes",
+        "web": "Firefox",
+        "photos": "Photos",
+        "editor": "Éditeur de texte",
+        "calculator": "Calculatrice",
         "terminal": "Terminal",
         "apps": "Applications",
         "trash": "Corbeille"
@@ -57,6 +60,10 @@ QtObject {
         "logout": "Close %1's session",
         "wifi": "Wi-Fi",
         "bluetooth": "Bluetooth",
+        "password": "Password",
+        "wrong_password": "Incorrect password",
+        "dnd": "Do not disturb",
+        "unavailable": "Unavailable",
         "theme": "Theme",
         "light": "Light",
         "dark": "Dark",
@@ -69,11 +76,10 @@ QtObject {
         "new_window": "New window",
         "open": "Open",
         "files": "Files",
-        "web": "Browser",
-        "messages": "Messages",
-        "phone": "Phone",
-        "meet": "Meet",
-        "notes": "Notes",
+        "web": "Firefox",
+        "photos": "Photos",
+        "editor": "Text editor",
+        "calculator": "Calculator",
         "terminal": "Terminal",
         "apps": "Apps",
         "trash": "Trash"
@@ -84,6 +90,23 @@ QtObject {
         var d = lang === "fr" ? fr : en
         var s = d[key] !== undefined ? d[key] : key
         return arg !== undefined ? s.replace("%1", arg) : s
+    }
+
+    // RisOS name of the base apps (desktop id -> key); every other app keeps its own name.
+    readonly property var baseNames: ({
+        "org.kde.dolphin": "files",
+        "org.kde.discover": "store",
+        "org.kde.konsole": "terminal",
+        "systemsettings": "settings",
+        "org.kde.gwenview": "photos",
+        "org.kde.kate": "editor",
+        "org.kde.kcalc": "calculator"
+    })
+
+    function appName(entry) {
+        var id = (entry.id || "").replace(/\.desktop$/, "")
+        var key = baseNames[id]
+        return key ? t(key) : entry.name
     }
 
     function dateText(d, fmt) {

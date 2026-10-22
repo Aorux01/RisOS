@@ -11,7 +11,7 @@
 #   risos-dev-sync                 apply the latest files
 #   risos-dev-sync --style         ... and apply icons, window frame and lock screen
 #   risos-dev-sync --shell         ... and (re)start the RisOS shell (needs quickshell installed); implies --style
-#   risos-dev-sync --layout        ... and rebuild the old Plasma top bar and dock
+#   risos-dev-sync --layout        ... and rebuild the Plasma menu panel (restarts plasmashell)
 #   risos-dev-sync --login         ... and restart SDDM to see the login screen (logs you out)
 #   risos-dev-sync --layout --login
 set -euo pipefail
@@ -47,7 +47,7 @@ sudo cp -rT "$src/usr/bin" /usr/bin
 sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
-[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --plasma --restart-shell
+[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --restart-shell
 
 if [ "$style" = 1 ] || [ "$shell" = 1 ]; then
   /usr/libexec/risos/apply-style.sh

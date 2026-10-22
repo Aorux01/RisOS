@@ -20,6 +20,7 @@ QtObject {
     readonly property color separator: dark ? Qt.rgba(1, 1, 1, 0.09) : Qt.rgba(0, 0, 0, 0.08)
     readonly property color tileOn: dark ? "#9bbbe0" : "#3a6788"
     readonly property color tileOnText: dark ? "#16202c" : "#ffffff"
+    readonly property color track: dark ? Qt.rgba(1, 1, 1, 0.16) : Qt.rgba(0, 0, 0, 0.1)
     readonly property color tileOff: dark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0, 0, 0, 0.05)
 
     // Text and icons

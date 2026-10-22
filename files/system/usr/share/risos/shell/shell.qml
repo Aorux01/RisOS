@@ -27,12 +27,23 @@ ShellRoot {
 
     Variants {
         model: Quickshell.screens
-        Dock {
+        DockGroup {
             pal: theme
             tr: texts
             ui: uiState
             windows: winSource
         }
+    }
+
+    LockScreen {
+        id: lockScreen
+        pal: theme
+        tr: texts
+    }
+
+    Connections {
+        target: uiState
+        function onLockRequested() { lockScreen.lock() }
     }
 
     Variants {

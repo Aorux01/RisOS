@@ -27,5 +27,5 @@ kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.k
 kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \
   --key Image file:///usr/share/wallpapers/RisOS/contents/images/2560x1600.svg
 
-# The RisOS bar has no global menu, so apps keep their own menu bar.
-kwriteconfig6 --file kded6rc --group Module-appmenu --key autoload false
+# Global menu: apps show their menus in the top bar instead of their own window.
+kwriteconfig6 --file kded6rc --group Module-appmenu --key autoload true

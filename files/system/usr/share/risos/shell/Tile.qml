@@ -1,6 +1,9 @@
+import Quickshell
+import Quickshell.Widgets
 import QtQuick
 
-// One dock icon: a rounded colored tile with a white glyph.
+// One dock icon. Either a rounded colored tile with a white glyph (RisOS base apps), or, when
+// iconName is set, the app's own icon (Firefox keeps its logo).
 // Below it: a dot when the app has a window, plus a fainter one behind it for two or more.
 Item {
     id: root
@@ -9,6 +12,7 @@ Item {
     property real radiusPx: 14
     property color tint: "#648aad"
     property url glyph
+    property string iconName
     property int windowCount: 0
 
     signal clicked()
@@ -17,25 +21,36 @@ Item {
     width: size
     height: size
 
-    Rectangle {
-        id: face
+    Item {
+        id: visual
         anchors.fill: parent
-        radius: root.radiusPx
-        gradient: Gradient {
-            GradientStop { position: 0; color: Qt.lighter(root.tint, 1.14) }
-            GradientStop { position: 1; color: Qt.darker(root.tint, 1.1) }
-        }
         scale: area.pressed ? 0.94 : (area.containsMouse ? 1.07 : 1.0)
         Behavior on scale {
             NumberAnimation { duration: 120; easing.type: Easing.OutCubic }
         }
 
-        Image {
-            anchors.centerIn: parent
-            width: root.size * 0.5
-            height: width
-            source: root.glyph
-            sourceSize: Qt.size(96, 96)
+        Rectangle {
+            anchors.fill: parent
+            visible: root.iconName === ""
+            radius: root.radiusPx
+            gradient: Gradient {
+                GradientStop { position: 0; color: Qt.lighter(root.tint, 1.14) }
+                GradientStop { position: 1; color: Qt.darker(root.tint, 1.1) }
+            }
+
+            Image {
+                anchors.centerIn: parent
+                width: root.size * 0.5
+                height: width
+                source: root.glyph
+                sourceSize: Qt.size(96, 96)
+            }
+        }
+
+        IconImage {
+            anchors.fill: parent
+            visible: root.iconName !== ""
+            source: root.iconName !== "" ? Quickshell.iconPath(root.iconName) : ""
         }
     }
 
