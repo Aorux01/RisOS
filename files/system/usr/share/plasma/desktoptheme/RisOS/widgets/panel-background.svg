@@ -1,57 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="140" height="80" viewBox="0 0 140 80">
-  <!-- Flat top bar: nine 4x4 cells, a 1px line at the bottom. Style: style/Bureau, fichiers — clair@2x.png -->
-  <g id="topleft"><rect x="0" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="top"><rect x="4" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="topright"><rect x="8" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="left"><rect x="0" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="center"><rect x="4" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="right"><rect x="8" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
-  <g id="bottomleft"><rect x="0" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="0" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
-  <g id="bottom"><rect x="4" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="4" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
-  <g id="bottomright"><rect x="8" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="8" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
-  <rect id="hint-stretch-borders" x="0" y="14" width="1" height="1"/>
-  <rect id="hint-left-margin" x="0" y="16" width="8" height="1"/>
-  <rect id="hint-right-margin" x="0" y="18" width="8" height="1"/>
-  <rect id="hint-top-margin" x="0" y="20" width="1" height="1"/>
-  <rect id="hint-bottom-margin" x="0" y="22" width="1" height="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="60" viewBox="0 0 140 60">
+  <!-- One rounded 9-slice used by both panels. The top bar is attached to the screen edges, so Plasma
+       only draws its bottom border (flat, with a 1px line); the floating dock gets all four rounded
+       borders. Corners are 24x24 quarter circles. Style: style/Bureau, fichiers — clair@2x.png -->
 
-  <!-- Floating dock: rounded, translucent, 1px outline. Corners are 36x36 quarter circles. -->
-  <g id="floating-topleft">
-    <path d="M56 0 A36 36 0 0 0 20 36 L56 36 Z" fill="#faf8f4" fill-opacity="0.88"/>
-    <path d="M56 0.5 A35.5 35.5 0 0 0 20.5 36" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  <g id="topleft">
+    <path d="M24 0 A24 24 0 0 0 0 24 L24 24 Z" fill="#faf9f6" fill-opacity="0.92"/>
+    <path d="M24 0.5 A23.5 23.5 0 0 0 0.5 24" fill="none" stroke="#000" stroke-opacity="0.09"/>
   </g>
-  <g id="floating-top">
-    <rect x="56" y="0" width="4" height="36" fill="#faf8f4" fill-opacity="0.88"/>
-    <rect x="56" y="0" width="4" height="1" fill="#000" fill-opacity="0.08"/>
+  <g id="top">
+    <rect x="24" y="0" width="4" height="24" fill="#faf9f6" fill-opacity="0.92"/>
+    <rect x="24" y="0" width="4" height="1" fill="#000" fill-opacity="0.09"/>
   </g>
-  <g id="floating-topright">
-    <path d="M60 0 A36 36 0 0 1 96 36 L60 36 Z" fill="#faf8f4" fill-opacity="0.88"/>
-    <path d="M60 0.5 A35.5 35.5 0 0 1 95.5 36" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  <g id="topright">
+    <path d="M28 0 A24 24 0 0 1 52 24 L28 24 Z" fill="#faf9f6" fill-opacity="0.92"/>
+    <path d="M28 0.5 A23.5 23.5 0 0 1 51.5 24" fill="none" stroke="#000" stroke-opacity="0.09"/>
   </g>
-  <g id="floating-left">
-    <rect x="20" y="36" width="36" height="4" fill="#faf8f4" fill-opacity="0.88"/>
-    <rect x="20" y="36" width="1" height="4" fill="#000" fill-opacity="0.08"/>
+  <g id="left">
+    <rect x="0" y="24" width="24" height="4" fill="#faf9f6" fill-opacity="0.92"/>
+    <rect x="0" y="24" width="1" height="4" fill="#000" fill-opacity="0.09"/>
   </g>
-  <g id="floating-center"><rect x="56" y="36" width="4" height="4" fill="#faf8f4" fill-opacity="0.88"/></g>
-  <g id="floating-right">
-    <rect x="60" y="36" width="36" height="4" fill="#faf8f4" fill-opacity="0.88"/>
-    <rect x="95" y="36" width="1" height="4" fill="#000" fill-opacity="0.08"/>
+  <g id="center">
+    <rect x="24" y="24" width="4" height="4" fill="#faf9f6" fill-opacity="0.92"/>
   </g>
-  <g id="floating-bottomleft">
-    <path d="M56 76 A36 36 0 0 1 20 40 L56 40 Z" fill="#faf8f4" fill-opacity="0.88"/>
-    <path d="M56 75.5 A35.5 35.5 0 0 1 20.5 40" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  <g id="right">
+    <rect x="28" y="24" width="24" height="4" fill="#faf9f6" fill-opacity="0.92"/>
+    <rect x="51" y="24" width="1" height="4" fill="#000" fill-opacity="0.09"/>
   </g>
-  <g id="floating-bottom">
-    <rect x="56" y="40" width="4" height="36" fill="#faf8f4" fill-opacity="0.88"/>
-    <rect x="56" y="75" width="4" height="1" fill="#000" fill-opacity="0.08"/>
+  <g id="bottomleft">
+    <path d="M24 52 A24 24 0 0 1 0 28 L24 28 Z" fill="#faf9f6" fill-opacity="0.92"/>
+    <path d="M24 51.5 A23.5 23.5 0 0 1 0.5 28" fill="none" stroke="#000" stroke-opacity="0.09"/>
   </g>
-  <g id="floating-bottomright">
-    <path d="M60 76 A36 36 0 0 0 96 40 L60 40 Z" fill="#faf8f4" fill-opacity="0.88"/>
-    <path d="M60 75.5 A35.5 35.5 0 0 0 95.5 40" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  <g id="bottom">
+    <rect x="24" y="28" width="4" height="24" fill="#faf9f6" fill-opacity="0.92"/>
+    <rect x="24" y="51" width="4" height="1" fill="#000" fill-opacity="0.09"/>
   </g>
-  <rect id="floating-hint-stretch-borders" x="100" y="0" width="1" height="1"/>
-  <rect id="floating-hint-left-margin" x="100" y="4" width="16" height="1"/>
-  <rect id="floating-hint-right-margin" x="100" y="8" width="16" height="1"/>
-  <rect id="floating-hint-top-margin" x="100" y="12" width="1" height="8"/>
-  <rect id="floating-hint-bottom-margin" x="100" y="24" width="1" height="8"/>
+  <g id="bottomright">
+    <path d="M28 52 A24 24 0 0 0 52 28 L28 28 Z" fill="#faf9f6" fill-opacity="0.92"/>
+    <path d="M28 51.5 A23.5 23.5 0 0 0 51.5 28" fill="none" stroke="#000" stroke-opacity="0.09"/>
+  </g>
+
+  <!-- Shape used to cut the blur and contrast regions behind the panel. -->
+  <path id="mask-topleft" d="M84 0 A24 24 0 0 0 60 24 L84 24 Z"/>
+  <rect id="mask-top" x="84" y="0" width="4" height="24"/>
+  <path id="mask-topright" d="M88 0 A24 24 0 0 1 112 24 L88 24 Z"/>
+  <rect id="mask-left" x="60" y="24" width="24" height="4"/>
+  <rect id="mask-center" x="84" y="24" width="4" height="4"/>
+  <rect id="mask-right" x="88" y="24" width="24" height="4"/>
+  <path id="mask-bottomleft" d="M84 52 A24 24 0 0 1 60 28 L84 28 Z"/>
+  <rect id="mask-bottom" x="84" y="28" width="4" height="24"/>
+  <path id="mask-bottomright" d="M88 52 A24 24 0 0 0 112 28 L88 28 Z"/>
+
+  <rect id="hint-left-margin" x="116" y="0" width="14" height="1"/>
+  <rect id="hint-right-margin" x="116" y="4" width="14" height="1"/>
+  <rect id="hint-top-margin" x="132" y="0" width="1" height="6"/>
+  <rect id="hint-bottom-margin" x="134" y="0" width="1" height="6"/>
 </svg>

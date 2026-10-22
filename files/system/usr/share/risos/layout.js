@@ -40,7 +40,8 @@ if (launcher) {
     launcher.currentConfigGroup = ["General"];
     launcher.writeConfig("icon", "risos-symbolic");
 }
-tryAdd(bar, "org.kde.windowtitle");
+// Our own: bold name of the active app (plasmoid org.risos.appname).
+tryAdd(bar, "org.risos.appname");
 tryAdd(bar, "org.kde.plasma.appmenu");
 tryAdd(bar, "org.kde.plasma.panelspacer");
 tryAdd(bar, "org.kde.plasma.systemtray");
