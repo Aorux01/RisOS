@@ -3,6 +3,10 @@
 # Run by first-login.sh for new users, and by hand (or risos-dev-sync) to try changes.
 set -uo pipefail
 
+# Colors and wallpaper.
+plasma-apply-colorscheme RisOSLight || true
+plasma-apply-wallpaperimage /usr/share/wallpapers/RisOS/contents/images/2560x1600.svg || true
+
 # Icons: colored tiles for the core apps, Breeze for the rest.
 kwriteconfig6 --file kdeglobals --group Icons --key Theme RisOS
 /usr/libexec/plasma-changeicons RisOS 2>/dev/null || true

@@ -61,6 +61,9 @@ fun place_centered(sprite, img, y) {
 
 fun set_fill(x, w) {
   if (w < global.bar_h) w = global.bar_h;
+  # Never stick out of the track.
+  if (x < global.bar_x) x = global.bar_x;
+  if (x + w > global.bar_x + global.bar_w) x = global.bar_x + global.bar_w - w;
   global.fill.SetImage(global.fill_src.Scale(w, global.bar_h));
   global.fill.SetX(x);
 }
@@ -160,6 +163,11 @@ fun refresh() {
     if (l < 0) l = 0;
     l = l * l * (3 - 2 * l);
     set_fill(global.bar_x + l * global.bar_w, (h - l) * global.bar_w);
+    # Fade out at the end of the loop and back in at the start, so there is no visible jump.
+    o = 1;
+    if (p > 0.85) o = (1 - p) / 0.15;
+    if (p < 0.08) o = p / 0.08;
+    global.fill.SetOpacity(o);
   }
 }
 Plymouth.SetRefreshFunction(refresh);

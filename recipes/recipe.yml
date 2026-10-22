@@ -22,6 +22,7 @@ modules:
         - podman
         - plymouth-plugin-script
         - librsvg2-tools
+        - quickshell
 
   # Login manager (SDDM), identity (os-release), Figtree font, boot/update splash (Plymouth).
   - type: script
