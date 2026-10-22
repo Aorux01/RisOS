@@ -9,7 +9,8 @@
 #
 # Usage (inside the VM):
 #   risos-dev-sync                 apply the latest files
-#   risos-dev-sync --layout        ... and rebuild the top bar and the dock
+#   risos-dev-sync --shell         ... and (re)start the RisOS shell (needs quickshell installed)
+#   risos-dev-sync --layout        ... and rebuild the old Plasma top bar and dock
 #   risos-dev-sync --login         ... and restart SDDM to see the login screen (logs you out)
 #   risos-dev-sync --layout --login
 set -euo pipefail
@@ -19,9 +20,11 @@ branch=main
 
 layout=0
 login=0
+shell=0
 for arg in "$@"; do
   case "$arg" in
     --layout) layout=1 ;;
+    --shell) shell=1 ;;
     --login|--restart-sddm) login=1 ;;
     *) echo "Unknown option: $arg" >&2; exit 1 ;;
   esac
@@ -41,7 +44,14 @@ sudo cp -rT "$src/usr/bin" /usr/bin
 sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
-[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --restart-shell
+[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh --plasma --restart-shell
+
+if [ "$shell" = 1 ]; then
+  # Remove Plasma's panels, then (re)start the RisOS shell in the background.
+  /usr/libexec/risos/apply-layout.sh
+  nohup /usr/libexec/risos/start-shell.sh >/tmp/risos-shell.log 2>&1 &
+  echo "RisOS shell started (log: /tmp/risos-shell.log)."
+fi
 
 if [ "$login" = 1 ]; then
   echo "Restarting SDDM (this logs you out)..."

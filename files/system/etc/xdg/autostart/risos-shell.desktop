@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=RisOS shell
+Exec=/usr/libexec/risos/start-shell.sh
+OnlyShowIn=KDE;
+NoDisplay=true
+X-KDE-autostart-phase=2
