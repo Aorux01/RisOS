@@ -32,3 +32,8 @@ kwriteconfig6 --file kcminputrc --group Keyboard --key NumLock 0
 
 # Global menu: apps show their menus in the top bar instead of their own window.
 kwriteconfig6 --file kded6rc --group Module-appmenu --key autoload true
+
+# Terminal: RisOS profile and colors, no toolbar (the menus are in the top bar).
+kwriteconfig6 --file konsolerc --group "Desktop Entry" --key DefaultProfile RisOS.profile
+kwriteconfig6 --file konsolerc --group MainWindow --group "Toolbar mainToolBar" --key Hidden true
+kwriteconfig6 --file konsolerc --group KonsoleWindow --key ShowMenuBarByDefault false
