@@ -96,20 +96,23 @@ fun layout() {
   global.s = global.k / global.R;
   k = global.k;
 
-  logo = scaled(global.logo_src);
   if (global.is_update) {
+    logo = scaled(global.logo_src);
     place_centered(global.logo_sprite, logo, 446 * k - logo.GetWidth() / 2);
     place_centered(global.title_sprite, scaled(global.title_src), 604 * k);
     place_centered(global.note_sprite, scaled(global.note_src), 790 * k);
     global.bar_w = 562 * k;
     global.bar_y = 697 * k;
   } else {
-    place_centered(global.logo_sprite, logo, 578 * k - logo.GetWidth() / 2);
-    global.bar_w = 250 * k;
-    global.bar_y = 768 * k;
+    # Smaller logo, wider bar, more room between them.
+    logo = global.logo_src.Scale(168 * k, 168 * k);
+    place_centered(global.logo_sprite, logo, 556 * k - 84 * k);
+    global.bar_w = 340 * k;
+    global.bar_y = 766 * k;
   }
   global.bar_x = global.cx - global.bar_w / 2;
-  global.bar_h = 7 * k;
+  global.bar_h = 10 * k;
+  if (global.is_update) global.bar_h = 7 * k;
 
   global.track.SetImage(global.track_src.Scale(global.bar_w, global.bar_h));
   global.track.SetX(global.bar_x);
@@ -125,7 +128,7 @@ fun layout() {
     show_percent(global.progress_value);
     set_fill(global.bar_x, global.bar_w * global.progress_value / 100);
   } else {
-    set_fill(global.bar_x, global.bar_w * 0.3);
+    set_fill(global.bar_x, global.bar_w * 0.2);
   }
 }
 
@@ -146,10 +149,14 @@ fun refresh() {
   if (Window.GetWidth() != global.sw || Window.GetHeight() != global.sh) layout();
   if (!global.is_update) {
     # Boot progress is not reliable: a segment glides back and forth along the track.
+    # It stretches while it moves fast and squeezes as it reaches the edges.
     global.tick++;
     t = global.tick / 50;                          # ~50 refreshes per second
-    pos = (1 - Math.Cos(t * 3.14159 / 1.1)) / 2;   # 0 -> 1 -> 0, one cycle every 2.2 s
-    seg_w = global.bar_w * 0.3;
+    a = t * 3.14159 / 1.1;
+    pos = (1 - Math.Cos(a)) / 2;                   # 0 -> 1 -> 0, one cycle every 2.2 s
+    speed = Math.Sin(a);
+    if (speed < 0) speed = -speed;
+    seg_w = global.bar_w * (0.12 + 0.34 * speed);
     set_fill(global.bar_x + (global.bar_w - seg_w) * pos, seg_w);
   }
 }

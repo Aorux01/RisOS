@@ -31,10 +31,11 @@ Rectangle {
 
         Image {
             id: logo
-            width: 206 * root.u
+            // Glyph only, dark on this light background (the SVG has no square behind it).
+            width: 240 * root.u
             height: width
             x: (parent.width - width) / 2
-            y: 578 * root.u - height / 2
+            y: 556 * root.u - height / 2
             source: "images/logo.svg"
             sourceSize: Qt.size(width * 2, height * 2)
             asynchronous: true
@@ -42,10 +43,10 @@ Rectangle {
 
         Item {
             id: bar
-            width: 250 * root.u
-            height: 7 * root.u
+            width: 340 * root.u
+            height: 10 * root.u
             x: (parent.width - width) / 2
-            y: 768 * root.u
+            y: 766 * root.u
 
             Rectangle {
                 anchors.fill: parent

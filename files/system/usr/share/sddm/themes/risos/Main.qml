@@ -23,6 +23,7 @@ Rectangle {
     property bool failed: false
     property bool menuOpen: false
     property bool showPassword: false
+    property bool busy: false   // a login attempt is waiting for the system's answer
 
     // System state, read from /sys and /proc (see GreeterEnvironment in zz-risos.conf).
     // Anything that cannot be read is simply not shown.
@@ -222,6 +223,7 @@ Rectangle {
         }
         Canvas {
             id: arrow
+            visible: !root.busy
             width: 24 * root.u
             height: 24 * root.u
             anchors.verticalCenter: parent.verticalCenter
@@ -247,6 +249,32 @@ Rectangle {
                 anchors.margins: -12 * root.u
                 cursorShape: Qt.PointingHandCursor
                 onClicked: root.login()
+            }
+        }
+
+        // Spinner shown while the password is being checked (the system adds a short delay).
+        Canvas {
+            visible: root.busy
+            width: 24 * root.u
+            height: 24 * root.u
+            anchors.verticalCenter: parent.verticalCenter
+            x: parent.width - 30 * root.u - width
+            onPaint: {
+                var c = getContext("2d")
+                c.reset()
+                c.strokeStyle = root.ink
+                c.lineWidth = 2.6 * root.u
+                c.lineCap = "round"
+                c.beginPath()
+                c.arc(width / 2, height / 2, width / 2 - 3 * root.u, 0, Math.PI * 1.5)
+                c.stroke()
+            }
+            RotationAnimator on rotation {
+                from: 0
+                to: 360
+                duration: 900
+                loops: Animation.Infinite
+                running: root.busy
             }
         }
 
@@ -350,13 +378,16 @@ Rectangle {
 
     // ---- Logic ---------------------------------------------------------------------------
     function login() {
-        if (root.userLogin.length > 0)
+        if (root.userLogin.length > 0 && !root.busy) {
+            root.busy = true
             sddm.login(root.userLogin, passwordInput.text, sessionModel.lastIndex)
+        }
     }
 
     Connections {
         target: sddm
         function onLoginFailed() {
+            root.busy = false
             passwordInput.text = ""
             root.failed = true
             shake.start()
