@@ -50,8 +50,8 @@
   <rect id="mask-bottom" x="84" y="28" width="4" height="24"/>
   <path id="mask-bottomright" d="M88 52 A24 24 0 0 0 112 28 L88 28 Z"/>
 
-  <rect id="hint-left-margin" x="116" y="0" width="14" height="1"/>
-  <rect id="hint-right-margin" x="116" y="4" width="14" height="1"/>
-  <rect id="hint-top-margin" x="132" y="0" width="1" height="6"/>
-  <rect id="hint-bottom-margin" x="134" y="0" width="1" height="6"/>
+  <rect id="hint-left-margin" x="116" y="0" width="10" height="1"/>
+  <rect id="hint-right-margin" x="116" y="4" width="10" height="1"/>
+  <rect id="hint-top-margin" x="132" y="0" width="1" height="1"/>
+  <rect id="hint-bottom-margin" x="134" y="0" width="1" height="1"/>
 </svg>

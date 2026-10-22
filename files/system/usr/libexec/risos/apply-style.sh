@@ -16,6 +16,8 @@ kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.k
 kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme __aurorae__svg__RisOS
 kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft ""
 kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight IAX
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key BorderSize Tiny
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key BorderSizeAuto false
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
 
 # Window titles: Figtree, semibold.
