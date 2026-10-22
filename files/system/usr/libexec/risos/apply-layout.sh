@@ -3,6 +3,9 @@
 # Uses busctl (part of systemd), so it needs no extra package.
 set -uo pipefail
 
+# Panel and menu theme (flat top bar, rounded floating dock).
+plasma-apply-desktoptheme RisOS || true
+
 # Wait for plasmashell to be reachable on the session bus.
 for _ in $(seq 60); do
   busctl --user status org.kde.plasmashell >/dev/null 2>&1 && break

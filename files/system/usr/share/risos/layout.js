@@ -11,6 +11,14 @@ function tryAdd(panel, id) {
     }
 }
 
+function trySet(obj, name, value) {
+    try {
+        obj[name] = value;
+    } catch (e) {
+        print("RisOS layout: cannot set " + name);
+    }
+}
+
 // Start from a clean slate.
 var existing = panels();
 for (var i = 0; i < existing.length; i++) {
@@ -18,32 +26,47 @@ for (var i = 0; i < existing.length; i++) {
 }
 
 // ---- Top bar ------------------------------------------------------------------------------
+// Left: logo, active app name, its menus. Right: system tray (network, battery, ...) and clock.
 var bar = new Panel();
 bar.location = "top";
-bar.height = 34;
+bar.height = 42;
 bar.floating = false;
 bar.hiding = "none";
 bar.lengthMode = "fill";
+trySet(bar, "opacity", "opaque");
 
 var launcher = tryAdd(bar, "org.kde.plasma.kickoff");
 if (launcher) {
     launcher.currentConfigGroup = ["General"];
-    launcher.writeConfig("icon", "risos-logo");
+    launcher.writeConfig("icon", "risos-symbolic");
 }
 tryAdd(bar, "org.kde.windowtitle");
 tryAdd(bar, "org.kde.plasma.appmenu");
 tryAdd(bar, "org.kde.plasma.panelspacer");
 tryAdd(bar, "org.kde.plasma.systemtray");
-tryAdd(bar, "org.kde.plasma.digitalclock");
+
+var clock = tryAdd(bar, "org.kde.plasma.digitalclock");
+if (clock) {
+    clock.currentConfigGroup = ["Appearance"];
+    clock.writeConfig("showDate", true);
+    clock.writeConfig("dateDisplayFormat", "BesideTime");
+    clock.writeConfig("dateFormat", "custom");
+    clock.writeConfig("customDateFormat", "ddd d MMM");
+    clock.writeConfig("autoFontAndSize", false);
+    clock.writeConfig("fontFamily", "Figtree");
+    clock.writeConfig("fontSize", 12);
+    clock.writeConfig("boldText", true);
+}
 
 // ---- Floating dock ------------------------------------------------------------------------
 var dock = new Panel();
 dock.location = "bottom";
-dock.height = 68;
+dock.height = 84;
 dock.floating = true;
 dock.lengthMode = "fit";
 dock.alignment = "center";
 dock.hiding = "dodgewindows";
+trySet(dock, "opacity", "opaque");
 
 var tasks = tryAdd(dock, "org.kde.plasma.icontasks");
 if (tasks) {

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="80" viewBox="0 0 140 80">
+  <!-- Flat top bar: nine 4x4 cells, a 1px line at the bottom. Style: style/Bureau, fichiers — clair@2x.png -->
+  <g id="topleft"><rect x="0" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="top"><rect x="4" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="topright"><rect x="8" y="0" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="left"><rect x="0" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="center"><rect x="4" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="right"><rect x="8" y="4" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/></g>
+  <g id="bottomleft"><rect x="0" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="0" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
+  <g id="bottom"><rect x="4" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="4" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
+  <g id="bottomright"><rect x="8" y="8" width="4" height="4" fill="#f7f7f5" fill-opacity="0.94"/><rect x="8" y="11" width="4" height="1" fill="#000" fill-opacity="0.08"/></g>
+  <rect id="hint-stretch-borders" x="0" y="14" width="1" height="1"/>
+  <rect id="hint-left-margin" x="0" y="16" width="8" height="1"/>
+  <rect id="hint-right-margin" x="0" y="18" width="8" height="1"/>
+  <rect id="hint-top-margin" x="0" y="20" width="1" height="1"/>
+  <rect id="hint-bottom-margin" x="0" y="22" width="1" height="1"/>
+
+  <!-- Floating dock: rounded, translucent, 1px outline. Corners are 36x36 quarter circles. -->
+  <g id="floating-topleft">
+    <path d="M56 0 A36 36 0 0 0 20 36 L56 36 Z" fill="#faf8f4" fill-opacity="0.88"/>
+    <path d="M56 0.5 A35.5 35.5 0 0 0 20.5 36" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  </g>
+  <g id="floating-top">
+    <rect x="56" y="0" width="4" height="36" fill="#faf8f4" fill-opacity="0.88"/>
+    <rect x="56" y="0" width="4" height="1" fill="#000" fill-opacity="0.08"/>
+  </g>
+  <g id="floating-topright">
+    <path d="M60 0 A36 36 0 0 1 96 36 L60 36 Z" fill="#faf8f4" fill-opacity="0.88"/>
+    <path d="M60 0.5 A35.5 35.5 0 0 1 95.5 36" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  </g>
+  <g id="floating-left">
+    <rect x="20" y="36" width="36" height="4" fill="#faf8f4" fill-opacity="0.88"/>
+    <rect x="20" y="36" width="1" height="4" fill="#000" fill-opacity="0.08"/>
+  </g>
+  <g id="floating-center"><rect x="56" y="36" width="4" height="4" fill="#faf8f4" fill-opacity="0.88"/></g>
+  <g id="floating-right">
+    <rect x="60" y="36" width="36" height="4" fill="#faf8f4" fill-opacity="0.88"/>
+    <rect x="95" y="36" width="1" height="4" fill="#000" fill-opacity="0.08"/>
+  </g>
+  <g id="floating-bottomleft">
+    <path d="M56 76 A36 36 0 0 1 20 40 L56 40 Z" fill="#faf8f4" fill-opacity="0.88"/>
+    <path d="M56 75.5 A35.5 35.5 0 0 1 20.5 40" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  </g>
+  <g id="floating-bottom">
+    <rect x="56" y="40" width="4" height="36" fill="#faf8f4" fill-opacity="0.88"/>
+    <rect x="56" y="75" width="4" height="1" fill="#000" fill-opacity="0.08"/>
+  </g>
+  <g id="floating-bottomright">
+    <path d="M60 76 A36 36 0 0 0 96 40 L60 40 Z" fill="#faf8f4" fill-opacity="0.88"/>
+    <path d="M60 75.5 A35.5 35.5 0 0 0 95.5 40" fill="none" stroke="#000" stroke-opacity="0.08"/>
+  </g>
+  <rect id="floating-hint-stretch-borders" x="100" y="0" width="1" height="1"/>
+  <rect id="floating-hint-left-margin" x="100" y="4" width="16" height="1"/>
+  <rect id="floating-hint-right-margin" x="100" y="8" width="16" height="1"/>
+  <rect id="floating-hint-top-margin" x="100" y="12" width="1" height="8"/>
+  <rect id="floating-hint-bottom-margin" x="100" y="24" width="1" height="8"/>
+</svg>

@@ -1,0 +1,15 @@
+{
+    "KPackageStructure": "Plasma/Theme",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "RisOS"
+            }
+        ],
+        "Description": "RisOS panels: a flat top bar and a floating rounded dock",
+        "Id": "RisOS",
+        "License": "GPL-2.0+",
+        "Name": "RisOS",
+        "Version": "0.1"
+    }
+}
