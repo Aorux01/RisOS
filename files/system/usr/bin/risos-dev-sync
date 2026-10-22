@@ -3,15 +3,29 @@
 # right away, without waiting for an image build.
 #
 # Works for anything that does not need a rebuild: the SDDM theme, color schemes, wallpapers,
-# config in /etc. It does not cover the Plymouth theme (it lives in the initramfs) or packages.
-# The changes live in a temporary overlay on /usr and disappear at the next reboot, when the
-# real image takes over again.
+# the panel layout, config in /etc. It does not cover the Plymouth theme (it lives in the
+# initramfs) or packages. The changes live in a temporary overlay on /usr and disappear at the
+# next reboot, when the real image takes over again.
 #
-# Usage (inside the VM):  bash dev-sync.sh [--restart-sddm]
+# Usage (inside the VM):
+#   risos-dev-sync                 apply the latest files
+#   risos-dev-sync --layout        ... and rebuild the top bar and the dock
+#   risos-dev-sync --login         ... and restart SDDM to see the login screen (logs you out)
+#   risos-dev-sync --layout --login
 set -euo pipefail
 
 repo=Aorux01/RisOS
 branch=main
+
+layout=0
+login=0
+for arg in "$@"; do
+  case "$arg" in
+    --layout) layout=1 ;;
+    --login|--restart-sddm) login=1 ;;
+    *) echo "Unknown option: $arg" >&2; exit 1 ;;
+  esac
+done
 
 # Make /usr writable (temporary). Fails harmlessly if it is already unlocked.
 sudo rpm-ostree usroverlay 2>/dev/null || true
@@ -23,10 +37,13 @@ src="$tmp/${repo#*/}-$branch/files/system"
 
 sudo cp -rT "$src/usr/share" /usr/share
 sudo cp -rT "$src/usr/libexec" /usr/libexec
+sudo cp -rT "$src/usr/bin" /usr/bin
 sudo cp -rT "$src/etc" /etc
 echo "Applied files/system from $repo@$branch."
 
-if [ "${1:-}" = "--restart-sddm" ]; then
+[ "$layout" = 1 ] && /usr/libexec/risos/apply-layout.sh
+
+if [ "$login" = 1 ]; then
   echo "Restarting SDDM (this logs you out)..."
   sudo systemctl restart sddm
 fi

@@ -34,10 +34,14 @@ Atomic OS derived from Fedora Kinoite, built with [BlueBuild](https://blue-build
 
 ## Fast iteration in the VM
 
-Image builds take 7 to 10 minutes. For the SDDM theme, color schemes, wallpapers and /etc config, skip the build:
+Image builds take 7 to 10 minutes. For the SDDM theme, color schemes, wallpapers, the panel layout and /etc config, skip the build:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/Aorux01/RisOS/main/tools/dev-sync.sh | bash -s -- --restart-sddm
+risos-dev-sync --layout --login
 ```
 
-It pulls the latest `files/system` from GitHub into a temporary overlay (gone at next reboot). It does not cover Plymouth or packages: those need a build.
+It pulls the latest `files/system` from GitHub into a temporary overlay (gone at next reboot). It does not cover Plymouth or packages: those need a build. Until the command exists in your image, fetch it once with:
+
+```
+curl -fsSL https://raw.githubusercontent.com/Aorux01/RisOS/main/files/system/usr/bin/risos-dev-sync | bash -s -- --layout --login
+```
