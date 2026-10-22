@@ -1,6 +1,6 @@
 import QtQuick
 
-// RisOS login screen, light. Layout follows style/Verrouillage — clair@2x.png (reference 2000x1250),
+// RisOS login screen, light. Layout follows style/lock-screen-light@2x.png (reference 2000x1250),
 // without the notifications and the privacy indicator, which belong to the lock screen.
 Rectangle {
     id: root

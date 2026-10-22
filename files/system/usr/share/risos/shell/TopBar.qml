@@ -89,7 +89,7 @@ PanelWindow {
         anchors.left: parent.left
         anchors.leftMargin: 10 * pal.u
         anchors.verticalCenter: parent.verticalCenter
-        width: 40 * pal.u
+        width: wordmark.width + 20 * pal.u
         height: 32 * pal.u
 
         Rectangle {
@@ -98,11 +98,12 @@ PanelWindow {
             color: ui.mode === "system" || logoArea.containsMouse ? pal.rowHover : "transparent"
         }
         Image {
+            id: wordmark
             anchors.centerIn: parent
-            width: 28 * pal.u
-            height: 28 * pal.u
-            source: pal.dark ? "icons/glyph-light.svg" : "icons/glyph.svg"
-            sourceSize: Qt.size(64, 64)
+            height: 20 * pal.u
+            width: height * 3013 / 790   // aspect ratio of the wordmark SVG
+            source: pal.dark ? "icons/wordmark-on-dark.svg" : "icons/wordmark-on-light.svg"
+            sourceSize: Qt.size(width * 2, height * 2)
         }
         MouseArea {
             id: logoArea

@@ -15,7 +15,7 @@ menu.floating = false;
 menu.hiding = "windowsgobelow";   // reserves no space: the RisOS bar already does
 menu.lengthMode = "custom";
 menu.alignment = "left";
-menu.offset = 58;                 // leaves room for the logo
+menu.offset = 118;                // leaves room for the wordmark
 menu.minimumLength = 900;
 menu.maximumLength = 900;
 

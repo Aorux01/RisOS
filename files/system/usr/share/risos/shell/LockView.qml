@@ -1,7 +1,7 @@
 import Quickshell
 import QtQuick
 
-// One lock screen, after style/Verrouillage — clair and sombre: the wallpaper, the date and a big
+// One lock screen, after style/lock-screen-light and lock-screen-dark: the wallpaper, the date and a big
 // clock, then the user and the password field.
 Item {
     id: view

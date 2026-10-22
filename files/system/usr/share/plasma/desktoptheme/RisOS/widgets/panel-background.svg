@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="140" height="60" viewBox="0 0 140 60">
   <!-- One rounded 9-slice used by both panels. The top bar is attached to the screen edges, so Plasma
        only draws its bottom border (flat, with a 1px line); the floating dock gets all four rounded
-       borders. Corners are 24x24 quarter circles. Style: style/Bureau, fichiers — clair@2x.png -->
+       borders. Corners are 24x24 quarter circles. Style: style/desktop-files-light@2x.png -->
 
   <g id="topleft">
     <path d="M24 0 A24 24 0 0 0 0 24 L24 24 Z" fill="#faf9f6" fill-opacity="0"/>

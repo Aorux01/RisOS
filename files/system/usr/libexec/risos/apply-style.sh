@@ -27,5 +27,8 @@ kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.k
 kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \
   --key Image file:///usr/share/wallpapers/RisOS/contents/images/2560x1600.svg
 
+# Num Lock stays on at login (0 = on, 1 = off, 2 = leave unchanged).
+kwriteconfig6 --file kcminputrc --group Keyboard --key NumLock 0
+
 # Global menu: apps show their menus in the top bar instead of their own window.
 kwriteconfig6 --file kded6rc --group Module-appmenu --key autoload true

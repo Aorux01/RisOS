@@ -5,8 +5,8 @@ import Quickshell.Widgets
 import QtQuick
 
 // Everything that opens above the desktop: the system menu (logo), the quick settings (status area),
-// the app launcher (dock) and the dock menu (right click). Layout follows style/Menus système,
-// Lanceur d'applications and Menus contextuels (clair and sombre).
+// the app launcher (dock) and the dock menu (right click). Layout follows style/system-menus,
+// app-launcher and context-menus (light and dark).
 PanelWindow {
     id: overlay
 

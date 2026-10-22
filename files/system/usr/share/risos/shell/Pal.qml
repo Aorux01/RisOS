@@ -1,6 +1,6 @@
 import QtQuick
 
-// Design tokens for the shell, light and dark (style/*clair* and style/*sombre* mockups).
+// Design tokens for the shell, light and dark (style/*-light* and style/*-dark* mockups).
 // Sizes are in "design pixels" of the 1280x800 mockup: raise `u` to scale everything.
 QtObject {
     property real u: 1.0

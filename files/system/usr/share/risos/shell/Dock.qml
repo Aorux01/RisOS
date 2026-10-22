@@ -3,7 +3,7 @@ import QtQuick
 
 // Floating dock. Left: the pinned base apps. Then a separator, the app launcher and the trash.
 // It reserves no space: windows go under it, and it slides away while the active window is
-// maximized or fullscreen (the bottom edge brings it back). See style/Bureau, fichiers — clair@2x.png.
+// maximized or fullscreen (the bottom edge brings it back). See style/desktop-files-light@2x.png.
 PanelWindow {
     id: dock
 

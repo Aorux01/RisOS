@@ -1,5 +1,5 @@
 # RisOS Plymouth theme: boot splash and system-update screen.
-# Layout follows style/Démarrage@2x.png and style/Mise à jour@2x.png (reference 2000x1250).
+# Layout follows style/boot@2x.png and style/update@2x.png (reference 2000x1250).
 # Images are rendered at 2x the reference by files/scripts/plymouth.sh, hence R.
 # Plymouth script: inside functions, globals must be accessed with "global.".
 # The layout is recomputed whenever the screen size changes (the display mode can
